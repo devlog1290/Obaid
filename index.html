@@ -445,6 +445,67 @@
                         <div id="admin-questions-list" class="space-y-3"></div>
                     </div>
 
+                    <!-- Edit Question Modal -->
+                    <div id="edit-question-modal" class="hidden fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+                        <div class="w-full max-w-2xl rounded-3xl bg-[#0d121f] border border-white/15 p-5 sm:p-7 space-y-4 my-auto">
+                            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                                <h4 class="font-extrabold text-base sm:text-lg text-amber-300">✏️ تعديل السؤال</h4>
+                                <button type="button" onclick="closeEditQuestionModal()" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 flex items-center justify-center font-bold cursor-pointer">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <form id="edit-question-form" onsubmit="handleSaveEditedQuestion(event)" class="space-y-4">
+                                <input id="edit-q-id" type="hidden" />
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">نص السؤال</label>
+                                    <input id="edit-q-text" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 1</label>
+                                        <input id="edit-q-opt-0" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 2</label>
+                                        <input id="edit-q-opt-1" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 3</label>
+                                        <input id="edit-q-opt-2" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 4</label>
+                                        <input id="edit-q-opt-3" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                                    <div class="flex items-center gap-2">
+                                        <label for="edit-q-correct" class="text-xs font-bold text-slate-300">الإجابة الصحيحة:</label>
+                                        <select id="edit-q-correct" class="px-3 py-2 rounded-xl bg-[#070a12] border border-white/15 text-xs font-bold text-emerald-300 outline-none">
+                                            <option value="0">الخيار 1</option>
+                                            <option value="1">الخيار 2</option>
+                                            <option value="2">الخيار 3</option>
+                                            <option value="3">الخيار 4</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" onclick="closeEditQuestionModal()" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-bold text-slate-300 cursor-pointer">
+                                            إلغاء
+                                        </button>
+                                        <button type="submit" class="px-5 py-2.5 rounded-xl gold-btn font-extrabold text-xs sm:text-sm cursor-pointer">
+                                            حفظ التعديلات
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                     <!-- 3. Settings & GitHub Publish Tab -->
                     <div id="admin-tab-settings" class="hidden space-y-6">
                         <form onsubmit="handleSaveSettings(event)" class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 sm:p-5 space-y-4">
@@ -1291,13 +1352,22 @@
                 <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 space-y-2.5">
                     <div class="flex items-start justify-between gap-3">
                         <h5 class="font-extrabold text-sm sm:text-base text-white">${qIdx + 1}. ${escapeHTML(q.text)}</h5>
-                        <button
-                            type="button"
-                            onclick="deleteQuestion('${q.id}')"
-                            class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs font-bold shrink-0 cursor-pointer"
-                        >
-                            حذف
-                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button
+                                type="button"
+                                onclick="openEditQuestionModal('${q.id}')"
+                                class="px-2.5 py-1 rounded-lg bg-amber-400/15 hover:bg-amber-400/25 text-amber-300 text-xs font-bold cursor-pointer"
+                            >
+                                تعديل
+                            </button>
+                            <button
+                                type="button"
+                                onclick="deleteQuestion('${q.id}')"
+                                class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs font-bold cursor-pointer"
+                            >
+                                حذف
+                            </button>
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         ${q.options.map((opt, oIdx) => `
@@ -1314,44 +1384,128 @@
             `).join('');
         }
 
+        function openEditQuestionModal(qId) {
+            try {
+                const q = (appData.questions || []).find(item => item.id === qId);
+                if (!q) {
+                    showToast('تعذر العثور على السؤال المطلوب تعديله.', 'error');
+                    return;
+                }
+
+                document.getElementById('edit-q-id').value = q.id;
+                document.getElementById('edit-q-text').value = q.text || '';
+                document.getElementById('edit-q-opt-0').value = (q.options && q.options[0]) || '';
+                document.getElementById('edit-q-opt-1').value = (q.options && q.options[1]) || '';
+                document.getElementById('edit-q-opt-2').value = (q.options && q.options[2]) || '';
+                document.getElementById('edit-q-opt-3').value = (q.options && q.options[3]) || '';
+                document.getElementById('edit-q-correct').value = String(q.correctIndex ?? 0);
+
+                document.getElementById('edit-question-modal').classList.remove('hidden');
+            } catch (err) {
+                console.error('خطأ أثناء فتح نافذة تعديل السؤال:', err);
+                showToast('حدث خطأ أثناء فتح نافذة التعديل.', 'error');
+            }
+        }
+
+        function closeEditQuestionModal() {
+            const modal = document.getElementById('edit-question-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+            const form = document.getElementById('edit-question-form');
+            if (form) {
+                form.reset();
+            }
+        }
+
+        function handleSaveEditedQuestion(e) {
+            e.preventDefault();
+            try {
+                const qId = document.getElementById('edit-q-id').value;
+                const text = document.getElementById('edit-q-text').value.trim();
+                const opts = [
+                    document.getElementById('edit-q-opt-0').value.trim(),
+                    document.getElementById('edit-q-opt-1').value.trim(),
+                    document.getElementById('edit-q-opt-2').value.trim(),
+                    document.getElementById('edit-q-opt-3').value.trim()
+                ];
+                const correctIndex = parseInt(document.getElementById('edit-q-correct').value, 10) || 0;
+
+                if (!text || opts.some(o => !o)) {
+                    showToast('يرجى تعبئة نص السؤال وجميع الخيارات الأربعة.', 'error');
+                    return;
+                }
+
+                const qIndex = (appData.questions || []).findIndex(item => item.id === qId);
+                if (qIndex === -1) {
+                    showToast('السؤال غير موجود.', 'error');
+                    return;
+                }
+
+                appData.questions[qIndex] = {
+                    ...appData.questions[qIndex],
+                    text,
+                    options: opts,
+                    correctIndex
+                };
+
+                saveToLocalStorage();
+                renderAdminQuestions();
+                closeEditQuestionModal();
+                showToast('تم تحديث السؤال بنجاح ✅', 'success');
+            } catch (err) {
+                console.error('خطأ أثناء حفظ تعديل السؤال:', err);
+                showToast('تعذر حفظ تعديل السؤال.', 'error');
+            }
+        }
+
         function handleAddQuestion(e) {
             e.preventDefault();
-            const text = document.getElementById('new-q-text').value.trim();
-            const opts = [
-                document.getElementById('new-q-opt-0').value.trim(),
-                document.getElementById('new-q-opt-1').value.trim(),
-                document.getElementById('new-q-opt-2').value.trim(),
-                document.getElementById('new-q-opt-3').value.trim()
-            ];
-            const correctIndex = parseInt(document.getElementById('new-q-correct').value, 10) || 0;
+            try {
+                const text = document.getElementById('new-q-text').value.trim();
+                const opts = [
+                    document.getElementById('new-q-opt-0').value.trim(),
+                    document.getElementById('new-q-opt-1').value.trim(),
+                    document.getElementById('new-q-opt-2').value.trim(),
+                    document.getElementById('new-q-opt-3').value.trim()
+                ];
+                const correctIndex = parseInt(document.getElementById('new-q-correct').value, 10) || 0;
 
-            if (!text || opts.some(o => !o)) {
-                showToast('يرجى تعبئة نص السؤال وجميع الخيارات الأربعة.', 'error');
-                return;
+                if (!text || opts.some(o => !o)) {
+                    showToast('يرجى إدخال نص السؤال وجميع الخيارات الأربعة.', 'error');
+                    return;
+                }
+
+                appData.questions.push({
+                    id: 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    text,
+                    options: opts,
+                    correctIndex
+                });
+
+                saveToLocalStorage();
+                renderAdminQuestions();
+                document.getElementById('add-question-form').reset();
+                showToast('تمت إضافة السؤال بنجاح ✅', 'success');
+            } catch (err) {
+                console.error('خطأ أثناء إضافة السؤال:', err);
+                showToast('تعذر إضافة السؤال.', 'error');
             }
-
-            appData.questions.push({
-                id: 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-                text,
-                options: opts,
-                correctIndex
-            });
-
-            saveToLocalStorage();
-            renderAdminQuestions();
-            document.getElementById('add-question-form').reset();
-            showToast('تمت إضافة السؤال بنجاح ✅', 'success');
         }
 
         function deleteQuestion(qId) {
-            if (appData.questions.length <= 1) {
-                showToast('يجب أن يبقى سؤال واحد على الأقل في الاختبار.', 'error');
-                return;
+            try {
+                if (appData.questions.length <= 1) {
+                    showToast('يجب أن يبقى سؤال واحد على الأقل في الاختبار.', 'error');
+                    return;
+                }
+                appData.questions = appData.questions.filter(q => q.id !== qId);
+                saveToLocalStorage();
+                renderAdminQuestions();
+                showToast('تم حذف السؤال.', 'info');
+            } catch (err) {
+                console.error('خطأ أثناء حذف السؤال:', err);
             }
-            appData.questions = appData.questions.filter(q => q.id !== qId);
-            saveToLocalStorage();
-            renderAdminQuestions();
-            showToast('تم حذف السؤال.', 'info');
         }
 
         function populateSettingsForm() {
@@ -1359,35 +1513,52 @@
             document.getElementById('set-person-name').value = s.personName || '';
             document.getElementById('set-title').value = s.title || '';
             document.getElementById('set-subtitle').value = s.subtitle || '';
-            document.getElementById('set-admin-user').value = s.adminUser || 'admin';
-            document.getElementById('set-admin-pass').value = s.adminPass || '1234';
+            document.getElementById('set-admin-user').value = s.adminUser || '';
+            document.getElementById('set-admin-pass').value = s.adminPass || '';
             document.getElementById('set-webhook-url').value = s.webhookUrl || '';
         }
 
         function handleSaveSettings(e) {
             e.preventDefault();
-            appData.settings = {
-                personName: document.getElementById('set-person-name').value.trim() || 'عبيد',
-                title: document.getElementById('set-title').value.trim() || 'هل تعرف عبيد؟',
-                subtitle: document.getElementById('set-subtitle').value.trim(),
-                adminUser: document.getElementById('set-admin-user').value.trim() || 'admin',
-                adminPass: document.getElementById('set-admin-pass').value.trim() || '1234',
-                webhookUrl: document.getElementById('set-webhook-url').value.trim()
-            };
-            saveToLocalStorage();
-            applySettingsToUI();
-            showToast('تم حفظ الإعدادات وتحديث الواجهة ✅', 'success');
+            try {
+                const personName = document.getElementById('set-person-name').value.trim() || 'عبيد';
+                const title = document.getElementById('set-title').value.trim() || `هل تعرف ${personName}؟`;
+                const subtitle = document.getElementById('set-subtitle').value.trim();
+                const adminUser = document.getElementById('set-admin-user').value.trim() || 'admin';
+                const adminPass = document.getElementById('set-admin-pass').value.trim() || '1234';
+                const webhookUrl = document.getElementById('set-webhook-url').value.trim();
+
+                appData.settings = {
+                    personName,
+                    title,
+                    subtitle,
+                    adminUser,
+                    adminPass,
+                    webhookUrl
+                };
+
+                saveToLocalStorage();
+                applySettingsToUI();
+                showToast('تم حفظ الإعدادات بنجاح ✅', 'success');
+            } catch (err) {
+                console.error('خطأ أثناء حفظ الإعدادات:', err);
+                showToast('تعذر حفظ الإعدادات.', 'error');
+            }
         }
 
         function handleResetDefaults() {
-            const currentPlayers = appData.players || [];
-            appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
-            appData.players = currentPlayers;
-            saveToLocalStorage();
-            populateSettingsForm();
-            renderAdminQuestions();
-            applySettingsToUI();
-            showToast('تمت استعادة الإعدادات والأسئلة الافتراضية.', 'info');
+            try {
+                appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
+                clearAttemptLock();
+                saveToLocalStorage();
+                populateSettingsForm();
+                renderAdminPlayers();
+                renderAdminQuestions();
+                applySettingsToUI();
+                showToast('تمت استعادة البيانات الافتراضية بنجاح.', 'info');
+            } catch (err) {
+                console.error('خطأ أثناء استعادة الافتراضي:', err);
+            }
         }
 
         function copyShareLink() {
@@ -1395,59 +1566,76 @@
         }
 
         function downloadUpdatedHtml() {
-            const embeddedScript = `
-                window.__PRELOADED_QUIZ_DATA__ = ${JSON.stringify(appData)};
-            `;
-            let htmlDoc = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            htmlDoc = htmlDoc.replace(
-                '<script>',
-                `<script>\n${embeddedScript}`
-            );
-            const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'index.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('تم تحميل ملف index.html المحدّث بنجاح ⬇️', 'success');
+            try {
+                const embeddedDataScript = `<script id="embedded-app-data" type="application/json">${JSON.stringify(appData)}<\/script>`;
+                let htmlSource = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+                if (!htmlSource.includes('id="embedded-app-data"')) {
+                    htmlSource = htmlSource.replace('</body>', `${embeddedDataScript}\n</body>`);
+                }
+                const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'index.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('تم تحميل ملف index.html المحدّث بنجاح ⬇️', 'success');
+            } catch (err) {
+                console.error('خطأ أثناء تحميل الملف:', err);
+                showToast('تعذر تحميل ملف index.html.', 'error');
+            }
         }
 
         function initApp() {
-            restoreAdminSessionAuth();
             try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    appData = {
-                        settings: { ...DEFAULT_APP_DATA.settings, ...(parsed.settings || {}) },
-                        questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
-                            ? parsed.questions
-                            : DEFAULT_APP_DATA.questions,
-                        players: Array.isArray(parsed.players) ? parsed.players : []
-                    };
-                } else if (window.__PRELOADED_QUIZ_DATA__) {
-                    const pre = window.__PRELOADED_QUIZ_DATA__;
-                    appData = {
-                        settings: { ...DEFAULT_APP_DATA.settings, ...(pre.settings || {}) },
-                        questions: Array.isArray(pre.questions) && pre.questions.length > 0
-                            ? pre.questions
-                            : DEFAULT_APP_DATA.questions,
-                        players: Array.isArray(pre.players) ? pre.players : []
-                    };
+                restoreAdminSessionAuth();
+
+                const embeddedEl = document.getElementById('embedded-app-data');
+                let loaded = false;
+
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        appData = {
+                            settings: { ...DEFAULT_APP_DATA.settings, ...(parsed.settings || {}) },
+                            questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
+                                ? parsed.questions
+                                : JSON.parse(JSON.stringify(DEFAULT_APP_DATA.questions)),
+                            players: Array.isArray(parsed.players) ? parsed.players : []
+                        };
+                        loaded = true;
+                    }
+                } catch (storageErr) {
+                    console.warn('تعذر قراءة التخزين المحلي:', storageErr);
                 }
-            } catch (e) {
-                console.warn('تعذر قراءة البيانات المحفوظة، سيتم استخدام الافتراضية:', e);
-                appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
-            }
 
-            applySettingsToUI();
+                if (!loaded && embeddedEl && embeddedEl.textContent) {
+                    try {
+                        const embeddedParsed = JSON.parse(embeddedEl.textContent);
+                        appData = {
+                            settings: { ...DEFAULT_APP_DATA.settings, ...(embeddedParsed.settings || {}) },
+                            questions: Array.isArray(embeddedParsed.questions) && embeddedParsed.questions.length > 0
+                                ? embeddedParsed.questions
+                                : JSON.parse(JSON.stringify(DEFAULT_APP_DATA.questions)),
+                            players: Array.isArray(embeddedParsed.players) ? embeddedParsed.players : []
+                        };
+                    } catch (embedErr) {
+                        console.warn('تعذر قراءة البيانات المضمنة:', embedErr);
+                    }
+                }
 
-            if (isAttemptLockedForThisDevice()) {
-                showLockedScreen();
-            } else {
+                applySettingsToUI();
+
+                if (isAttemptLockedForThisDevice()) {
+                    showLockedScreen();
+                } else {
+                    switchScreen('screen-welcome');
+                }
+            } catch (err) {
+                console.error('خطأ أثناء تهيئة التطبيق:', err);
                 switchScreen('screen-welcome');
             }
         }
