@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>هل تعرف عبيد؟ - تحدي المعرفة</title>
+    <title>هل تعرف محمد حسن؟ - تحدي المعرفة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -89,7 +89,7 @@
                 </span>
                 <div>
                     <div id="header-brand-title" class="font-extrabold text-base sm:text-lg text-white leading-tight">
-                        هل تعرف عبيد؟
+                        هل تعرف محمد حسن؟
                     </div>
                     <div id="header-player-badge" class="hidden text-xs text-amber-300/90 font-semibold">
                         المتحدي: <span id="header-player-name"></span>
@@ -120,11 +120,11 @@
                 </div>
 
                 <h1 id="main-hero-title" class="text-3xl sm:text-5xl font-black text-white tracking-tight mb-4 leading-snug">
-                    هل تعرف عبيد؟
+                    هل تعرف محمد حسن؟
                 </h1>
 
                 <p id="main-hero-subtitle" class="text-slate-300 text-sm sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-                    سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل عبيد، عاداته، ومواقفه المفضلة.
+                    سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل محمد حسن، عاداته، ومواقفه المفضلة.
                 </p>
 
                 <!-- Quick Stats -->
@@ -514,17 +514,27 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-300 mb-1">اسم الشخصية</label>
-                                    <input id="set-person-name" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                    <input id="set-person-name" type="text" required oninput="handleLiveSettingsPreview('person')" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-300 mb-1">عنوان الصفحة الرئيسي</label>
-                                    <input id="set-title" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                    <input id="set-title" type="text" required oninput="handleLiveSettingsPreview('title')" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-300 mb-1">الوصف المختصر</label>
-                                <input id="set-subtitle" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                <input id="set-subtitle" type="text" oninput="handleLiveSettingsPreview('subtitle')" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                            </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">عنوان الصفحة الرئيسي</label>
+                                    <input id="set-title" type="text" required oninput="handleLiveSettingsPreview()" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">الوصف المختصر</label>
+                                <input id="set-subtitle" type="text" oninput="handleLiveSettingsPreview()" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -597,9 +607,9 @@
 
         const DEFAULT_APP_DATA = {
             settings: {
-                personName: 'عبيد',
-                title: 'هل تعرف عبيد؟',
-                subtitle: 'سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل عبيد، عاداته، ومواقفه المفضلة.',
+                personName: 'محمد حسن',
+                title: 'هل تعرف محمد حسن؟',
+                subtitle: 'سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل محمد حسن، عاداته، ومواقفه المفضلة.',
                 adminUser: 'admin',
                 adminPass: '1234',
                 webhookUrl: ''
@@ -607,31 +617,31 @@
             questions: [
                 {
                     id: 'q1',
-                    text: 'وش أكثر وقت يصحى أو يسهر فيه عبيد غالباً؟',
+                    text: 'وش أكثر وقت يصحى أو يسهر فيه محمد حسن غالباً؟',
                     options: ['الصباح بدري مع الشروق', 'العصر بعد القيلولة', 'آخر الليل والهدوء', 'حسب المزاج والجدول'],
                     correctIndex: 2
                 },
                 {
                     id: 'q2',
-                    text: 'لو خيّرت عبيد بين طلعة هادية أو جمعة صاخبة، وش يميل له أكثر؟',
+                    text: 'لو خيّرت محمد حسن بين طلعة هادية أو جمعة صاخبة، وش يميل له أكثر؟',
                     options: ['طلعة هادية ومكان رايق', 'جمعة صاخبة طول الوقت', 'جلسة بيت مع قهوة', 'حسب اللي معه'],
                     correctIndex: 0
                 },
                 {
                     id: 'q3',
-                    text: 'وش المشروب اللي يضبط مزاج عبيد بسرعة؟',
+                    text: 'وش المشروب اللي يضبط مزاج محمد حسن بسرعة؟',
                     options: ['قهوة / كوفي', 'شاهي', 'عصير طازج', 'موية باردة وبس'],
                     correctIndex: 0
                 },
                 {
                     id: 'q4',
-                    text: 'كيف يكون رد فعل عبيد غالباً وقت المواقف المفاجئة؟',
+                    text: 'كيف يكون رد فعل محمد حسن غالباً وقت المواقف المفاجئة؟',
                     options: ['ياخذها بهدوء ويحللها', 'يعصب بسرعة', 'يضحك ويعديها', 'يسأل الكل فوراً'],
                     correctIndex: 0
                 },
                 {
                     id: 'q5',
-                    text: 'أكثر صفة تميز عبيد بنظر اللي يعرفونه زين؟',
+                    text: 'أكثر صفة تميز محمد حسن بنظر اللي يعرفونه زين؟',
                     options: ['الصراحة والوفاء', 'التردد الدائم', 'السرعة في الغضب', 'كثرة الكلام بلا سبب'],
                     correctIndex: 0
                 }
@@ -696,8 +706,45 @@
         function saveToLocalStorage() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                syncEmbeddedAppData();
+                syncShareHashInUrl();
             } catch (e) {
                 console.warn('خطأ في حفظ البيانات محلياً:', e);
+            }
+        }
+
+        function syncShareHashInUrl() {
+            try {
+                const sharePayload = {
+                    settings: {
+                        personName: appData.settings.personName,
+                        title: appData.settings.title,
+                        subtitle: appData.settings.subtitle
+                    },
+                    questions: appData.questions
+                };
+                const encoded = encodeSharePayload(sharePayload);
+                const newHash = `#quiz=${encodeURIComponent(encoded)}`;
+                if (window.location.hash !== newHash && window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', newHash);
+                }
+            } catch (e) {
+                console.warn('تعذر تحديث رابط الصفحة المباشر:', e);
+            }
+        }
+
+        function syncEmbeddedAppData() {
+            try {
+                let embeddedEl = document.getElementById('embedded-app-data');
+                if (!embeddedEl) {
+                    embeddedEl = document.createElement('script');
+                    embeddedEl.id = 'embedded-app-data';
+                    embeddedEl.type = 'application/json';
+                    document.body.appendChild(embeddedEl);
+                }
+                embeddedEl.textContent = JSON.stringify(appData);
+            } catch (e) {
+                console.warn('تعذر تحديث البيانات المضمنة:', e);
             }
         }
 
@@ -799,16 +846,20 @@
 
         function applySettingsToUI() {
             const s = appData.settings || DEFAULT_APP_DATA.settings;
-            document.title = s.title || DEFAULT_APP_DATA.settings.title;
+            const personName = s.personName || 'محمد حسن';
+            const resolvedTitle = s.title || `هل تعرف ${personName}؟`;
+            const resolvedSubtitle = s.subtitle || `سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل ${personName}، عاداته، ومواقفه المفضلة.`;
+
+            document.title = resolvedTitle;
 
             const brandEl = document.getElementById('header-brand-title');
-            if (brandEl) brandEl.textContent = s.title || DEFAULT_APP_DATA.settings.title;
+            if (brandEl) brandEl.textContent = resolvedTitle;
 
             const mainTitleEl = document.getElementById('main-hero-title');
-            if (mainTitleEl) mainTitleEl.textContent = s.title || DEFAULT_APP_DATA.settings.title;
+            if (mainTitleEl) mainTitleEl.textContent = resolvedTitle;
 
             const subtitleEl = document.getElementById('main-hero-subtitle');
-            if (subtitleEl) subtitleEl.textContent = s.subtitle || '';
+            if (subtitleEl) subtitleEl.textContent = resolvedSubtitle;
 
             const qCountEl = document.getElementById('stat-questions-count');
             if (qCountEl) qCountEl.textContent = `${appData.questions.length} أسئلة`;
@@ -1046,7 +1097,7 @@
         }
 
         function renderResultScreen(playerRecord) {
-            const rank = getRankInfo(playerRecord.percent, appData.settings.personName || 'عبيد');
+            const rank = getRankInfo(playerRecord.percent, appData.settings.personName || 'محمد حسن');
             document.getElementById('result-emoji').textContent = rank.emoji;
             document.getElementById('result-player-greeting').textContent = `نتيجة المتحدي: ${playerRecord.name}`;
             document.getElementById('result-rank-title').textContent = rank.title;
@@ -1451,8 +1502,11 @@
 
                 saveToLocalStorage();
                 renderAdminQuestions();
+                if (!document.getElementById('screen-quiz').classList.contains('hidden')) {
+                    renderQuestion();
+                }
                 closeEditQuestionModal();
-                showToast('تم تحديث السؤال بنجاح ✅', 'success');
+                showToast('تم تحديث السؤال وانعكس على الموقع فوراً ✅', 'success');
             } catch (err) {
                 console.error('خطأ أثناء حفظ تعديل السؤال:', err);
                 showToast('تعذر حفظ تعديل السؤال.', 'error');
@@ -1483,10 +1537,14 @@
                     correctIndex
                 });
 
+                selectedAnswers.push(null);
                 saveToLocalStorage();
                 renderAdminQuestions();
+                if (!document.getElementById('screen-quiz').classList.contains('hidden')) {
+                    renderQuestion();
+                }
                 document.getElementById('add-question-form').reset();
-                showToast('تمت إضافة السؤال بنجاح ✅', 'success');
+                showToast('تمت إضافة السؤال وتحديث الموقع فوراً ✅', 'success');
             } catch (err) {
                 console.error('خطأ أثناء إضافة السؤال:', err);
                 showToast('تعذر إضافة السؤال.', 'error');
@@ -1494,34 +1552,71 @@
         }
 
         function deleteQuestion(qId) {
-            try {
-                if (appData.questions.length <= 1) {
-                    showToast('يجب أن يبقى سؤال واحد على الأقل في الاختبار.', 'error');
-                    return;
-                }
-                appData.questions = appData.questions.filter(q => q.id !== qId);
-                saveToLocalStorage();
-                renderAdminQuestions();
-                showToast('تم حذف السؤال.', 'info');
-            } catch (err) {
-                console.error('خطأ أثناء حذف السؤال:', err);
+            if (!Array.isArray(appData.questions) || appData.questions.length <= 1) {
+                showToast('يجب أن يبقى سؤال واحد على الأقل في الاختبار.', 'error');
+                return;
             }
+            const removedIdx = appData.questions.findIndex(q => q.id === qId);
+            appData.questions = appData.questions.filter(q => q.id !== qId);
+            if (removedIdx !== -1 && Array.isArray(selectedAnswers)) {
+                selectedAnswers.splice(removedIdx, 1);
+                if (currentQuestionIndex >= appData.questions.length) {
+                    currentQuestionIndex = Math.max(0, appData.questions.length - 1);
+                }
+            }
+            saveToLocalStorage();
+            renderAdminQuestions();
+            if (!document.getElementById('screen-quiz').classList.contains('hidden')) {
+                renderQuestion();
+            }
+            showToast('تم حذف السؤال وتحديث الموقع فوراً.', 'info');
         }
 
         function populateSettingsForm() {
             const s = appData.settings || DEFAULT_APP_DATA.settings;
-            document.getElementById('set-person-name').value = s.personName || '';
-            document.getElementById('set-title').value = s.title || '';
+            document.getElementById('set-person-name').value = s.personName || 'محمد حسن';
+            document.getElementById('set-title').value = s.title || `هل تعرف ${s.personName || 'محمد حسن'}؟`;
             document.getElementById('set-subtitle').value = s.subtitle || '';
-            document.getElementById('set-admin-user').value = s.adminUser || '';
-            document.getElementById('set-admin-pass').value = s.adminPass || '';
+            document.getElementById('set-admin-user').value = s.adminUser || 'admin';
+            document.getElementById('set-admin-pass').value = s.adminPass || '1234';
             document.getElementById('set-webhook-url').value = s.webhookUrl || '';
+        }
+
+        function handleLiveSettingsPreview(changedField = '') {
+            try {
+                const personInput = document.getElementById('set-person-name');
+                const titleInput = document.getElementById('set-title');
+                const subtitleInput = document.getElementById('set-subtitle');
+
+                const prevPerson = appData.settings.personName || 'محمد حسن';
+                const newPerson = (personInput ? personInput.value.trim() : '') || 'محمد حسن';
+
+                // تحديث عنوان الصفحة تلقائياً إذا غيّر الأدمن اسم الشخصية وكان العنوان مرتبطاً بالاسم السابق
+                if (changedField === 'person' && titleInput) {
+                    const currentTitleVal = titleInput.value.trim();
+                    if (!currentTitleVal || currentTitleVal === `هل تعرف ${prevPerson}؟`) {
+                        titleInput.value = `هل تعرف ${newPerson}؟`;
+                    }
+                }
+
+                const newTitle = (titleInput ? titleInput.value.trim() : '') || `هل تعرف ${newPerson}؟`;
+                const newSubtitle = subtitleInput ? subtitleInput.value.trim() : '';
+
+                appData.settings.personName = newPerson;
+                appData.settings.title = newTitle;
+                appData.settings.subtitle = newSubtitle;
+
+                applySettingsToUI();
+                saveToLocalStorage();
+            } catch (err) {
+                console.warn('خطأ أثناء المعاينة الفورية للإعدادات:', err);
+            }
         }
 
         function handleSaveSettings(e) {
             e.preventDefault();
             try {
-                const personName = document.getElementById('set-person-name').value.trim() || 'عبيد';
+                const personName = document.getElementById('set-person-name').value.trim() || 'محمد حسن';
                 const title = document.getElementById('set-title').value.trim() || `هل تعرف ${personName}؟`;
                 const subtitle = document.getElementById('set-subtitle').value.trim();
                 const adminUser = document.getElementById('set-admin-user').value.trim() || 'admin';
@@ -1539,7 +1634,7 @@
 
                 saveToLocalStorage();
                 applySettingsToUI();
-                showToast('تم حفظ الإعدادات بنجاح ✅', 'success');
+                showToast('تم حفظ الإعدادات وتحديث الموقع فوراً ✅', 'success');
             } catch (err) {
                 console.error('خطأ أثناء حفظ الإعدادات:', err);
                 showToast('تعذر حفظ الإعدادات.', 'error');
@@ -1547,32 +1642,61 @@
         }
 
         function handleResetDefaults() {
-            try {
-                appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
-                clearAttemptLock();
-                saveToLocalStorage();
-                populateSettingsForm();
-                renderAdminPlayers();
-                renderAdminQuestions();
-                applySettingsToUI();
-                showToast('تمت استعادة البيانات الافتراضية بنجاح.', 'info');
-            } catch (err) {
-                console.error('خطأ أثناء استعادة الافتراضي:', err);
+            const preservedPlayers = Array.isArray(appData.players) ? appData.players : [];
+            appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
+            appData.players = preservedPlayers;
+            saveToLocalStorage();
+            populateSettingsForm();
+            renderAdminQuestions();
+            applySettingsToUI();
+            showToast('تمت استعادة الإعدادات والأسئلة الافتراضية.', 'info');
+        }
+
+        function encodeSharePayload(payloadObj) {
+            const jsonStr = JSON.stringify(payloadObj);
+            const bytes = new TextEncoder().encode(jsonStr);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
             }
+            return btoa(binary);
+        }
+
+        function decodeSharePayload(base64Str) {
+            const binary = atob(base64Str);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            const jsonStr = new TextDecoder().decode(bytes);
+            return JSON.parse(jsonStr);
         }
 
         function copyShareLink() {
-            copyTextToClipboard(window.location.href, 'تم نسخ رابط التحدي بنجاح 🔗');
+            try {
+                const sharePayload = {
+                    settings: {
+                        personName: appData.settings.personName,
+                        title: appData.settings.title,
+                        subtitle: appData.settings.subtitle
+                    },
+                    questions: appData.questions
+                };
+                const encoded = encodeSharePayload(sharePayload);
+                const baseUrl = window.location.href.split('#')[0];
+                const shareUrl = `${baseUrl}#quiz=${encodeURIComponent(encoded)}`;
+                copyTextToClipboard(shareUrl, 'تم نسخ رابط التحدي المحدّث! 🔗');
+            } catch (err) {
+                console.error('خطأ أثناء إنشاء رابط المشاركة:', err);
+                copyTextToClipboard(window.location.href.split('#')[0], 'تم نسخ رابط الصفحة!');
+            }
         }
 
         function downloadUpdatedHtml() {
             try {
-                const embeddedDataScript = `<script id="embedded-app-data" type="application/json">${JSON.stringify(appData)}<\/script>`;
-                let htmlSource = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-                if (!htmlSource.includes('id="embedded-app-data"')) {
-                    htmlSource = htmlSource.replace('</body>', `${embeddedDataScript}\n</body>`);
-                }
-                const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8;' });
+                syncEmbeddedAppData();
+                const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -1583,69 +1707,89 @@
                 URL.revokeObjectURL(url);
                 showToast('تم تحميل ملف index.html المحدّث بنجاح ⬇️', 'success');
             } catch (err) {
-                console.error('خطأ أثناء تحميل الملف:', err);
-                showToast('تعذر تحميل ملف index.html.', 'error');
+                console.error('خطأ أثناء تحميل ملف HTML:', err);
+                showToast('تعذر تحميل الملف.', 'error');
             }
         }
 
         function initApp() {
             try {
-                restoreAdminSessionAuth();
-
                 const embeddedEl = document.getElementById('embedded-app-data');
-                let loaded = false;
-
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEY);
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        appData = {
-                            settings: { ...DEFAULT_APP_DATA.settings, ...(parsed.settings || {}) },
-                            questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
-                                ? parsed.questions
-                                : JSON.parse(JSON.stringify(DEFAULT_APP_DATA.questions)),
-                            players: Array.isArray(parsed.players) ? parsed.players : []
-                        };
-                        loaded = true;
-                    }
-                } catch (storageErr) {
-                    console.warn('تعذر قراءة التخزين المحلي:', storageErr);
+                if (embeddedEl && embeddedEl.textContent.trim()) {
+                    const embeddedParsed = JSON.parse(embeddedEl.textContent);
+                    appData = {
+                        settings: { ...DEFAULT_APP_DATA.settings, ...(embeddedParsed.settings || {}) },
+                        questions: Array.isArray(embeddedParsed.questions) && embeddedParsed.questions.length > 0
+                            ? embeddedParsed.questions
+                            : DEFAULT_APP_DATA.questions,
+                        players: Array.isArray(embeddedParsed.players) ? embeddedParsed.players : []
+                    };
                 }
 
-                if (!loaded && embeddedEl && embeddedEl.textContent) {
-                    try {
-                        const embeddedParsed = JSON.parse(embeddedEl.textContent);
-                        appData = {
-                            settings: { ...DEFAULT_APP_DATA.settings, ...(embeddedParsed.settings || {}) },
-                            questions: Array.isArray(embeddedParsed.questions) && embeddedParsed.questions.length > 0
-                                ? embeddedParsed.questions
-                                : JSON.parse(JSON.stringify(DEFAULT_APP_DATA.questions)),
-                            players: Array.isArray(embeddedParsed.players) ? embeddedParsed.players : []
-                        };
-                    } catch (embedErr) {
-                        console.warn('تعذر قراءة البيانات المضمنة:', embedErr);
-                    }
+                const savedRaw = localStorage.getItem(STORAGE_KEY);
+                if (savedRaw) {
+                    const parsed = JSON.parse(savedRaw);
+                    appData = {
+                        settings: { ...appData.settings, ...(parsed.settings || {}) },
+                        questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
+                            ? parsed.questions
+                            : appData.questions,
+                        players: Array.isArray(parsed.players) ? parsed.players : appData.players
+                    };
                 }
 
-                applySettingsToUI();
-
-                if (isAttemptLockedForThisDevice()) {
-                    showLockedScreen();
-                } else {
-                    switchScreen('screen-welcome');
+                const hash = window.location.hash || '';
+                if (hash.startsWith('#quiz=')) {
+                    const encodedPart = decodeURIComponent(hash.slice(6));
+                    const sharedData = decodeSharePayload(encodedPart);
+                    if (sharedData && typeof sharedData === 'object') {
+                        if (sharedData.settings) {
+                            appData.settings = { ...appData.settings, ...sharedData.settings };
+                        }
+                        if (Array.isArray(sharedData.questions) && sharedData.questions.length > 0) {
+                            appData.questions = sharedData.questions;
+                        }
+                        saveToLocalStorage();
+                    }
                 }
             } catch (err) {
-                console.error('خطأ أثناء تهيئة التطبيق:', err);
+                console.warn('تعذر قراءة بعض البيانات المحفوظة، سيتم استخدام الإعدادات الحالية:', err);
+            }
+
+            restoreAdminSessionAuth();
+            applySettingsToUI();
+
+            if (isAttemptLockedForThisDevice()) {
+                showLockedScreen();
+            } else {
                 switchScreen('screen-welcome');
             }
         }
 
-        window.addEventListener('DOMContentLoaded', function () {
-            try {
-                initApp();
-            } catch (err) {
-                console.error('خطأ أثناء تهيئة التطبيق:', err);
+        window.addEventListener('storage', function (e) {
+            if (e.key === STORAGE_KEY && e.newValue) {
+                try {
+                    const parsed = JSON.parse(e.newValue);
+                    appData = {
+                        settings: { ...DEFAULT_APP_DATA.settings, ...(parsed.settings || {}) },
+                        questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
+                            ? parsed.questions
+                            : DEFAULT_APP_DATA.questions,
+                        players: Array.isArray(parsed.players) ? parsed.players : []
+                    };
+                    applySettingsToUI();
+                    if (isAdminAuthenticated) {
+                        renderAdminPlayers();
+                        renderAdminQuestions();
+                    }
+                } catch (err) {
+                    console.warn('تعذر مزامنة التغييرات من تبويب آخر:', err);
+                }
             }
+        });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            initApp();
         });
     </script>
 </body>
