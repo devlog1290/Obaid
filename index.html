@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>هل تعرف عبيد؟ - تحدي المعرفة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        obsidian: '#07090f',
+                        surface: '#0e1320',
+                        surfaceLight: '#161e31',
+                        gold: '#f5b82e',
+                        goldLight: '#ffd56b',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #07090f;
+            color: #f8fafc;
+            font-family: 'Cairo', 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(245, 184, 46, 0.08), transparent 40%),
+                radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.07), transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(168, 85, 247, 0.06), transparent 45%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-bottom: env(safe-area-inset-bottom);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* منع تكبير الخط التلقائي في متصفحات iOS عند التركيز على الحقول */
+        input, select, textarea {
+            font-size: 16px;
+        }
+
+        @media (min-width: 768px) {
+            input.desktop-compact, select.desktop-compact {
+                font-size: 14px;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.35s ease-out forwards;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-400 selection:text-slate-950">
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 w-[92%] max-w-md pointer-events-none"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-[#07090f]/80 backdrop-blur-xl" style="padding-top: env(safe-area-inset-top);">
+        <div class="max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-3">
+            <button onclick="goHome()" class="flex items-center gap-2.5 text-right group focus:outline-none">
+                <span class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400/20 to-amber-600/10 border border-amber-400/30 flex items-center justify-center text-xl shadow-inner group-hover:scale-105 transition">
+                    👑
+                </span>
+                <div>
+                    <div id="header-brand-title" class="font-extrabold text-base sm:text-lg text-white leading-tight">
+                        هل تعرف عبيد؟
+                    </div>
+                    <div id="header-player-badge" class="hidden text-xs text-amber-300/90 font-semibold">
+                        المتحدي: <span id="header-player-name"></span>
+                    </div>
+                </div>
+            </button>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button
+                    onclick="openAdminModal()"
+                    class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2 transition cursor-pointer"
+                >
+                    <span>🔐</span>
+                    <span>الأدمن</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl md:max-w-3xl lg:max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-14">
+        <!-- 1. Welcome Screen -->
+        <section id="screen-welcome" class="animate-fade-in">
+            <div class="glass-card rounded-3xl p-5 sm:p-8 lg:p-12 text-center relative overflow-hidden">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs sm:text-sm font-bold mb-6">
+                    <span>✨</span>
+                    <span>اختبار شخصي حصري</span>
+                </div>
+
+                <h1 id="main-hero-title" class="text-3xl sm:text-5xl font-black text-white tracking-tight mb-4 leading-snug">
+                    هل تعرف عبيد؟
+                </h1>
+
+                <p id="main-hero-subtitle" class="text-slate-300 text-sm sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                    سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل عبيد، عاداته، ومواقفه المفضلة.
+                </p>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 gap-3 sm:gap-4 max-w-md mx-auto mb-8">
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
+                        <div id="stat-questions-count" class="text-2xl sm:text-3xl font-black text-amber-400">5 أسئلة</div>
+                        <div class="text-xs text-slate-400 mt-1">إجمالي الأسئلة</div>
+                    </div>
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
+                        <div class="text-2xl sm:text-3xl font-black text-sky-400">محاولة واحدة</div>
+                        <div class="text-xs text-slate-400 mt-1">لكل مشارك</div>
+                    </div>
+                </div>
+
+                <!-- Mandatory Player Name Form -->
+                <form id="start-quiz-form" onsubmit="handleStartSubmit(event)" class="max-w-md mx-auto space-y-4">
+                    <div class="text-right">
+                        <label for="player-name-input" class="block text-sm font-bold text-slate-200 mb-2">
+                            اسمك قبل بدء التحدي <span class="text-rose-400">*</span>
+                        </label>
+                        <input
+                            id="player-name-input"
+                            type="text"
+                            maxlength="40"
+                            oninput="clearNameError()"
+                            placeholder="اكتب اسمك هنا..."
+                            class="w-full px-4 py-3.5 rounded-2xl bg-[#090d16] border border-white/15 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 text-white placeholder-slate-500 font-semibold outline-none transition"
+                        />
+                        <p id="name-error-msg" class="hidden text-xs text-rose-400 font-bold mt-2 text-right">
+                            ⚠️ يرجى كتابة اسمك أولاً قبل بدء الاختبار.
+                        </p>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="w-full py-4 px-6 rounded-2xl gold-btn font-extrabold text-base sm:text-lg flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span>🚀</span>
+                        <span>ابدأ التحدي الآن</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 2. Quiz Screen -->
+        <section id="screen-quiz" class="hidden animate-fade-in">
+            <div class="glass-card rounded-3xl p-5 sm:p-8 lg:p-10">
+                <!-- Progress Bar -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-slate-300 mb-2.5">
+                        <span>السؤال <span id="quiz-current-index" class="text-amber-400">1</span> من <span id="quiz-total-count">5</span></span>
+                        <span id="quiz-progress-percent" class="text-sky-400">20%</span>
+                    </div>
+                    <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+                        <div id="quiz-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-400 to-sky-400 transition-all duration-300" style="width: 20%"></div>
+                    </div>
+                </div>
+
+                <!-- Question Text -->
+                <h2 id="quiz-question-text" class="text-xl sm:text-2xl font-extrabold text-white leading-relaxed mb-6">
+                    نص السؤال يظهر هنا...
+                </h2>
+
+                <!-- Options Container -->
+                <div id="quiz-options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5"></div>
+
+                <!-- Instant Answer Feedback Box -->
+                <div id="quiz-answer-feedback" class="hidden rounded-2xl p-4 border mb-7 text-sm font-bold transition-all duration-200"></div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-between gap-3 pt-4 border-t border-white/10">
+                    <button
+                        id="prev-question-btn"
+                        type="button"
+                        onclick="handlePrevQuestion()"
+                        class="px-5 py-3 rounded-2xl bg-white/5 hover:bg-white/10 disabled:opacity-35 disabled:pointer-events-none border border-white/10 text-sm font-bold text-slate-200 transition cursor-pointer"
+                    >
+                        السابق
+                    </button>
+
+                    <button
+                        id="next-question-btn"
+                        type="button"
+                        onclick="handleNextQuestion()"
+                        disabled
+                        class="px-6 py-3 rounded-2xl gold-btn disabled:opacity-40 disabled:pointer-events-none text-sm sm:text-base font-extrabold transition cursor-pointer"
+                    >
+                        التالي
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Result Screen -->
+        <section id="screen-result" class="hidden animate-fade-in">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 text-center">
+                <div id="result-emoji" class="text-6xl mb-4">🏆</div>
+                <div class="text-sm font-bold text-amber-300 mb-1" id="result-player-greeting">نتيجة المتحدي</div>
+                <h2 id="result-rank-title" class="text-2xl sm:text-4xl font-black text-white mb-3">
+                    خبير في عبيد!
+                </h2>
+                <p id="result-rank-desc" class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mb-7">
+                    أداء مميز ومعرفة ممتازة بتفاصيل عبيد.
+                </p>
+
+                <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-7">
+                    <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
+                        <div id="result-score-text" class="text-3xl font-black text-amber-400">0/0</div>
+                        <div class="text-xs text-slate-400 mt-1">الإجابات الصحيحة</div>
+                    </div>
+                    <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
+                        <div id="result-percent-text" class="text-3xl font-black text-emerald-400">0%</div>
+                        <div class="text-xs text-slate-400 mt-1">نسبة المعرفة</div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Summary Toggle -->
+                <div class="max-w-2xl mx-auto mb-6 text-right">
+                    <button
+                        type="button"
+                        onclick="toggleSummaryAccordion()"
+                        class="w-full px-5 py-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 flex items-center justify-between text-sm font-bold text-slate-200 transition cursor-pointer"
+                    >
+                        <span>📋 عرض ملخص إجاباتك في التحدي</span>
+                        <span id="summary-chevron" class="text-slate-400 transition-transform duration-200">▼</span>
+                    </button>
+                    <div id="result-summary-list" class="hidden mt-3 space-y-2.5"></div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <button
+                        type="button"
+                        onclick="shareCurrentResult()"
+                        class="px-6 py-3.5 rounded-2xl gold-btn font-extrabold text-sm sm:text-base flex items-center gap-2 cursor-pointer"
+                    >
+                        <span>📤</span>
+                        <span>مشاركة النتيجة</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Locked Screen (After Completing Exam / Refresh) -->
+        <section id="screen-locked" class="hidden animate-fade-in">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 text-center border border-rose-500/25">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs sm:text-sm font-bold mb-5">
+                    <span>🔒</span>
+                    <span>الامتحان مغلق لهذا المتصفح</span>
+                </div>
+
+                <h2 class="text-2xl sm:text-4xl font-black text-white mb-3">
+                    لقد أنهيت التحدي مسبقاً!
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mb-7 leading-relaxed">
+                    تم حفظ نتيجتك السابقة في سجل الأدمن، ولا يمكنك إعادة الامتحان حتى بعد تحديث الصفحة (Refresh) إلا إذا قام الأدمن بفتح إعادة الامتحان لك.
+                </p>
+
+                <div class="grid grid-cols-3 gap-3 max-w-lg mx-auto mb-7">
+                    <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
+                        <div id="locked-player-name" class="text-base sm:text-lg font-extrabold text-white truncate">-</div>
+                        <div class="text-xs text-slate-400 mt-1">الاسم</div>
+                    </div>
+                    <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
+                        <div id="locked-score" class="text-lg sm:text-xl font-black text-amber-400">0/0</div>
+                        <div class="text-xs text-slate-400 mt-1">الدرجة</div>
+                    </div>
+                    <div class="rounded-2xl bg-white/[0.04] border border-white/10 p-4">
+                        <div id="locked-percent" class="text-lg sm:text-xl font-black text-emerald-400">0%</div>
+                        <div class="text-xs text-slate-400 mt-1">النسبة</div>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="shareLockedResult()"
+                    class="px-6 py-3.5 rounded-2xl gold-btn font-extrabold text-sm sm:text-base inline-flex items-center gap-2 cursor-pointer"
+                >
+                    <span>📤</span>
+                    <span>مشاركة النتيجة المحفوظة</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="w-full max-w-4xl rounded-3xl bg-[#0c111d] border border-white/15 shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="px-5 sm:px-7 py-4 border-b border-white/10 flex items-center justify-between bg-[#101727]">
+                <div class="flex items-center gap-2.5">
+                    <span class="text-xl">🛠️</span>
+                    <h3 class="font-extrabold text-base sm:text-lg text-white">لوحة تحكم الأدمن</h3>
+                </div>
+                <button
+                    type="button"
+                    onclick="closeAdminModal()"
+                    class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white flex items-center justify-center font-bold transition cursor-pointer"
+                >
+                    ✕
+                </button>
+            </div>
+
+            <!-- Login View -->
+            <div id="admin-login-view" class="p-6 sm:p-8 overflow-y-auto">
+                <form onsubmit="handleAdminLogin(event)" class="max-w-sm mx-auto space-y-4">
+                    <div class="text-center mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-400/15 border border-amber-400/30 text-amber-300 text-2xl flex items-center justify-center mx-auto mb-3">
+                            🔑
+                        </div>
+                        <h4 class="text-lg font-extrabold text-white">تسجيل دخول الأدمن</h4>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5">اسم المستخدم</label>
+                        <input id="admin-user-input" type="text" required class="w-full px-4 py-3 rounded-xl bg-[#070a12] border border-white/15 text-white outline-none focus:border-amber-400" />
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5">كلمة المرور</label>
+                        <input id="admin-pass-input" type="password" required class="w-full px-4 py-3 rounded-xl bg-[#070a12] border border-white/15 text-white outline-none focus:border-amber-400" />
+                    </div>
+
+                    <p id="admin-login-error" class="hidden text-xs text-rose-400 font-bold">بيانات الدخول غير صحيحة.</p>
+
+                    <button type="submit" class="w-full py-3.5 rounded-xl gold-btn font-extrabold text-sm cursor-pointer">
+                        دخول إلى لوحة التحكم
+                    </button>
+                </form>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="admin-dashboard-view" class="hidden flex-1 flex flex-col overflow-hidden">
+                <!-- Tabs -->
+                <div class="px-4 sm:px-6 pt-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 bg-[#0d1321]">
+                    <div class="flex flex-wrap gap-1.5">
+                        <button id="tab-btn-players" type="button" onclick="switchAdminTab('players')" class="px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold bg-amber-400/15 text-amber-300 border-b-2 border-amber-400 cursor-pointer">
+                            👥 سجل اللاعبين (<span id="admin-players-count">0</span>)
+                        </button>
+                        <button id="tab-btn-questions" type="button" onclick="switchAdminTab('questions')" class="px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white cursor-pointer">
+                            ❓ الأسئلة (<span id="admin-questions-count">0</span>)
+                        </button>
+                        <button id="tab-btn-settings" type="button" onclick="switchAdminTab('settings')" class="px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white cursor-pointer">
+                            ⚙️ الإعدادات والنشر
+                        </button>
+                    </div>
+                    <button type="button" onclick="handleAdminLogout()" class="text-xs font-bold text-rose-400 hover:text-rose-300 py-2 cursor-pointer">
+                        تسجيل خروج
+                    </button>
+                </div>
+
+                <!-- Tab Content Area -->
+                <div class="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6">
+                    <!-- 1. Players Log Tab -->
+                    <div id="admin-tab-players" class="space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-xs sm:text-sm text-slate-300">
+                                يظهر هنا كل من أنهى الاختبار مع إجاباته الكاملة وزر <strong class="text-amber-300">إعادة امتحان</strong> لفتح محاولة جديدة له.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="exportPlayersCSV()" class="px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-bold cursor-pointer">
+                                    📊 تصدير CSV
+                                </button>
+                                <button type="button" onclick="clearAllPlayersLog()" class="px-3.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold cursor-pointer">
+                                    🗑️ مسح الكل
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="admin-players-list" class="space-y-3"></div>
+                    </div>
+
+                    <!-- 2. Questions Tab -->
+                    <div id="admin-tab-questions" class="hidden space-y-6">
+                        <form id="add-question-form" onsubmit="handleAddQuestion(event)" class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 sm:p-5 space-y-4">
+                            <h4 class="font-extrabold text-sm sm:text-base text-amber-300">➕ إضافة سؤال جديد</h4>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">نص السؤال</label>
+                                <input id="new-q-text" type="text" required placeholder="مثال: وش أكثر أكلة يحبها عبيد؟" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 1</label>
+                                    <input id="new-q-opt-0" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 2</label>
+                                    <input id="new-q-opt-1" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 3</label>
+                                    <input id="new-q-opt-2" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">الخيار 4</label>
+                                    <input id="new-q-opt-3" type="text" required class="w-full px-3.5 py-2 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="flex items-center gap-2">
+                                    <label for="new-q-correct" class="text-xs font-bold text-slate-300">الإجابة الصحيحة:</label>
+                                    <select id="new-q-correct" class="px-3 py-2 rounded-xl bg-[#070a12] border border-white/15 text-xs font-bold text-emerald-300 outline-none">
+                                        <option value="0">الخيار 1</option>
+                                        <option value="1">الخيار 2</option>
+                                        <option value="2">الخيار 3</option>
+                                        <option value="3">الخيار 4</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="px-5 py-2.5 rounded-xl gold-btn font-extrabold text-xs sm:text-sm cursor-pointer">
+                                    حفظ السؤال
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="admin-questions-list" class="space-y-3"></div>
+                    </div>
+
+                    <!-- 3. Settings & GitHub Publish Tab -->
+                    <div id="admin-tab-settings" class="hidden space-y-6">
+                        <form onsubmit="handleSaveSettings(event)" class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 sm:p-5 space-y-4">
+                            <h4 class="font-extrabold text-sm sm:text-base text-amber-300">⚙️ إعدادات الاختبار والحساب</h4>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">اسم الشخصية</label>
+                                    <input id="set-person-name" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">عنوان الصفحة الرئيسي</label>
+                                    <input id="set-title" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">الوصف المختصر</label>
+                                <input id="set-subtitle" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">اسم مستخدم الأدمن</label>
+                                    <input id="set-admin-user" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">كلمة مرور الأدمن</label>
+                                    <input id="set-admin-pass" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">رابط Discord Webhook (اختياري لاستلام النتائج فوراً)</label>
+                                <input id="set-webhook-url" type="url" placeholder="https://discord.com/api/webhooks/..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                            </div>
+
+                            <div class="flex flex-wrap gap-3 pt-2">
+                                <button type="submit" class="px-5 py-2.5 rounded-xl gold-btn font-extrabold text-xs sm:text-sm cursor-pointer">
+                                    حفظ الإعدادات
+                                </button>
+                                <button type="button" onclick="handleResetDefaults()" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-bold text-slate-300 cursor-pointer">
+                                    استعادة الافتراضي
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- GitHub Pages Share & Export -->
+                        <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 sm:p-5 space-y-3">
+                            <h4 class="font-extrabold text-sm sm:text-base text-sky-300">🌐 النشر والمشاركة على GitHub Pages</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                يمكنك نسخ رابط التحدي الحالي أو تحميل ملف <code class="text-amber-300">index.html</code> المحدّث بالأسئلة والإعدادات لرفعه مباشرة على مستودعك في GitHub.
+                            </p>
+                            <div class="flex flex-wrap gap-2.5 pt-1">
+                                <button type="button" onclick="copyShareLink()" class="px-4 py-2.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 text-xs font-bold cursor-pointer">
+                                    🔗 نسخ رابط التحدي
+                                </button>
+                                <button type="button" onclick="downloadUpdatedHtml()" class="px-4 py-2.5 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/30 text-amber-300 text-xs font-bold cursor-pointer">
+                                    ⬇️ تحميل index.html المحدّث
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Answers Detail Modal -->
+    <div id="player-detail-modal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-2xl rounded-3xl bg-[#0d121f] border border-white/15 p-5 sm:p-7 space-y-4 my-auto max-h-[88vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <div>
+                    <h4 id="detail-player-title" class="font-extrabold text-lg text-white">تفاصيل إجابات اللاعب</h4>
+                    <p id="detail-player-meta" class="text-xs text-slate-400 mt-0.5"></p>
+                </div>
+                <button type="button" onclick="closePlayerDetailModal()" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 flex items-center justify-center font-bold cursor-pointer">
+                    ✕
+                </button>
+            </div>
+            <div id="detail-player-answers" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'obaid_vip_quiz_v2';
+        const LOCK_STORAGE_KEY = 'obaid_vip_quiz_attempt_lock_v1';
+
+        const DEFAULT_APP_DATA = {
+            settings: {
+                personName: 'عبيد',
+                title: 'هل تعرف عبيد؟',
+                subtitle: 'سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل عبيد، عاداته، ومواقفه المفضلة.',
+                adminUser: 'admin',
+                adminPass: '1234',
+                webhookUrl: ''
+            },
+            questions: [
+                {
+                    id: 'q1',
+                    text: 'وش أكثر وقت يصحى أو يسهر فيه عبيد غالباً؟',
+                    options: ['الصباح بدري مع الشروق', 'العصر بعد القيلولة', 'آخر الليل والهدوء', 'حسب المزاج والجدول'],
+                    correctIndex: 2
+                },
+                {
+                    id: 'q2',
+                    text: 'لو خيّرت عبيد بين طلعة هادية أو جمعة صاخبة، وش يميل له أكثر؟',
+                    options: ['طلعة هادية ومكان رايق', 'جمعة صاخبة طول الوقت', 'جلسة بيت مع قهوة', 'حسب اللي معه'],
+                    correctIndex: 0
+                },
+                {
+                    id: 'q3',
+                    text: 'وش المشروب اللي يضبط مزاج عبيد بسرعة؟',
+                    options: ['قهوة / كوفي', 'شاهي', 'عصير طازج', 'موية باردة وبس'],
+                    correctIndex: 0
+                },
+                {
+                    id: 'q4',
+                    text: 'كيف يكون رد فعل عبيد غالباً وقت المواقف المفاجئة؟',
+                    options: ['ياخذها بهدوء ويحللها', 'يعصب بسرعة', 'يضحك ويعديها', 'يسأل الكل فوراً'],
+                    correctIndex: 0
+                },
+                {
+                    id: 'q5',
+                    text: 'أكثر صفة تميز عبيد بنظر اللي يعرفونه زين؟',
+                    options: ['الصراحة والوفاء', 'التردد الدائم', 'السرعة في الغضب', 'كثرة الكلام بلا سبب'],
+                    correctIndex: 0
+                }
+            ],
+            players: []
+        };
+
+        let appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
+        let isAdminAuthenticated = false;
+        let currentPlayerName = '';
+        let currentQuestionIndex = 0;
+        let selectedAnswers = [];
+        let lastFinishedPlayerId = null;
+
+        function escapeHTML(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const colors = {
+                info: 'bg-[#131b2e] border-sky-400/40 text-sky-200',
+                success: 'bg-[#10231b] border-emerald-400/40 text-emerald-200',
+                error: 'bg-[#261117] border-rose-400/40 text-rose-200'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `px-4 py-3 rounded-2xl border shadow-xl text-xs sm:text-sm font-bold backdrop-blur-md transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-8px)';
+                setTimeout(() => toast.remove(), 250);
+            }, 3000);
+        }
+
+        function copyTextToClipboard(text, successMsg = 'تم النسخ بنجاح!') {
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast(successMsg, 'success');
+            } catch (err) {
+                showToast('تعذر النسخ تلقائياً.', 'error');
+            }
+        }
+
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.warn('خطأ في حفظ البيانات محلياً:', e);
+            }
+        }
+
+        function getAttemptLock() {
+            try {
+                const raw = localStorage.getItem(LOCK_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setAttemptLock(lockObj) {
+            try {
+                localStorage.setItem(LOCK_STORAGE_KEY, JSON.stringify(lockObj));
+            } catch (e) {
+                console.warn('خطأ في حفظ قفل المحاولة:', e);
+            }
+        }
+
+        function clearAttemptLock() {
+            try {
+                localStorage.removeItem(LOCK_STORAGE_KEY);
+            } catch (e) {
+                console.warn('خطأ في إزالة قفل المحاولة:', e);
+            }
+        }
+
+        function isAttemptLockedForThisDevice(playerId = null) {
+            const lock = getAttemptLock();
+            if (!lock || !lock.locked) return false;
+
+            if (lock.playerId && Array.isArray(appData.players)) {
+                const existsInAdmin = appData.players.some(p => p.id === lock.playerId);
+                if (!existsInAdmin) {
+                    clearAttemptLock();
+                    return false;
+                }
+            }
+
+            if (playerId !== null) {
+                return lock.playerId === playerId;
+            }
+            return true;
+        }
+
+        function showLockedScreen() {
+            const lock = getAttemptLock();
+            const matchedPlayer = lock && lock.playerId
+                ? (appData.players || []).find(p => p.id === lock.playerId)
+                : null;
+
+            const displayName = matchedPlayer ? matchedPlayer.name : (lock && lock.name ? lock.name : 'متحدي سابق');
+            const displayScore = matchedPlayer ? `${matchedPlayer.score}/${matchedPlayer.total}` : (lock ? `${lock.score}/${lock.total}` : '0/0');
+            const displayPercent = matchedPlayer ? `${matchedPlayer.percent}%` : (lock ? `${lock.percent}%` : '0%');
+
+            document.getElementById('locked-player-name').textContent = displayName;
+            document.getElementById('locked-score').textContent = displayScore;
+            document.getElementById('locked-percent').textContent = displayPercent;
+
+            switchScreen('screen-locked');
+        }
+
+        function shareLockedResult() {
+            const lock = getAttemptLock();
+            const matchedPlayer = lock && lock.playerId
+                ? (appData.players || []).find(p => p.id === lock.playerId)
+                : null;
+
+            const pName = matchedPlayer ? matchedPlayer.name : (lock && lock.name ? lock.name : 'متحدي');
+            const pScore = matchedPlayer ? matchedPlayer.score : (lock ? lock.score : 0);
+            const pTotal = matchedPlayer ? matchedPlayer.total : (lock ? lock.total : appData.questions.length);
+            const pPercent = matchedPlayer ? matchedPlayer.percent : (lock ? lock.percent : 0);
+
+            const text = `أنا "${pName}" جبت ${pScore} من ${pTotal} (${pPercent}%) في تحدي "${appData.settings.title}"! 👑\nادخل وسجّل اسمك وشوف كم تعرف ${appData.settings.personName}:\n${window.location.href}`;
+            copyTextToClipboard(text, 'تم نسخ نتيجتك المحفوظة! الصقها وشاركها الآن 🎉');
+        }
+
+        function applySettingsToUI() {
+            const s = appData.settings || DEFAULT_APP_DATA.settings;
+            document.title = s.title || DEFAULT_APP_DATA.settings.title;
+
+            const brandEl = document.getElementById('header-brand-title');
+            if (brandEl) brandEl.textContent = s.title || DEFAULT_APP_DATA.settings.title;
+
+            const mainTitleEl = document.getElementById('main-hero-title');
+            if (mainTitleEl) mainTitleEl.textContent = s.title || DEFAULT_APP_DATA.settings.title;
+
+            const subtitleEl = document.getElementById('main-hero-subtitle');
+            if (subtitleEl) subtitleEl.textContent = s.subtitle || '';
+
+            const qCountEl = document.getElementById('stat-questions-count');
+            if (qCountEl) qCountEl.textContent = `${appData.questions.length} أسئلة`;
+
+            const badgeEl = document.getElementById('header-player-badge');
+            const badgeNameEl = document.getElementById('header-player-name');
+            if (badgeEl && badgeNameEl) {
+                if (currentPlayerName) {
+                    badgeNameEl.textContent = currentPlayerName;
+                    badgeEl.classList.remove('hidden');
+                } else {
+                    badgeEl.classList.add('hidden');
+                }
+            }
+        }
+
+        function switchScreen(screenId) {
+            ['screen-welcome', 'screen-quiz', 'screen-result', 'screen-locked'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(screenId);
+            if (target) target.classList.remove('hidden');
+        }
+
+        function goHome() {
+            applySettingsToUI();
+            if (isAttemptLockedForThisDevice()) {
+                showLockedScreen();
+                return;
+            }
+            switchScreen('screen-welcome');
+        }
+
+        function clearNameError() {
+            document.getElementById('name-error-msg').classList.add('hidden');
+            document.getElementById('player-name-input').classList.remove('border-rose-500', 'animate-shake');
+        }
+
+        function handleStartSubmit(e) {
+            e.preventDefault();
+            if (isAttemptLockedForThisDevice()) {
+                showLockedScreen();
+                return;
+            }
+
+            if (!Array.isArray(appData.questions) || appData.questions.length === 0) {
+                showToast('لا توجد أسئلة متاحة حالياً. أضف أسئلة من لوحة الأدمن.', 'error');
+                return;
+            }
+
+            const input = document.getElementById('player-name-input');
+            const name = input.value.trim();
+            if (!name) {
+                const errMsg = document.getElementById('name-error-msg');
+                errMsg.classList.remove('hidden');
+                input.classList.add('border-rose-500', 'animate-shake');
+                input.focus();
+                return;
+            }
+
+            currentPlayerName = name;
+            currentQuestionIndex = 0;
+            selectedAnswers = new Array(appData.questions.length).fill(null);
+            applySettingsToUI();
+            switchScreen('screen-quiz');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const total = appData.questions.length;
+            const q = appData.questions[currentQuestionIndex];
+            if (!q) return;
+
+            document.getElementById('quiz-current-index').textContent = currentQuestionIndex + 1;
+            document.getElementById('quiz-total-count').textContent = total;
+            const pct = Math.round(((currentQuestionIndex + 1) / total) * 100);
+            document.getElementById('quiz-progress-percent').textContent = `${pct}%`;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+            document.getElementById('quiz-question-text').textContent = q.text;
+
+            const container = document.getElementById('quiz-options-container');
+            const feedbackEl = document.getElementById('quiz-answer-feedback');
+            container.innerHTML = '';
+
+            const chosen = selectedAnswers[currentQuestionIndex];
+            const hasAnswered = chosen !== null && chosen !== undefined;
+
+            q.options.forEach((optText, idx) => {
+                const isSelected = chosen === idx;
+                const isCorrectOption = idx === q.correctIndex;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectOption(idx);
+
+                let btnStyle = 'bg-white/[0.03] hover:bg-white/[0.07] border-white/10 text-slate-200';
+                let badgeStyle = 'bg-white/10 text-slate-300';
+                let statusIcon = '';
+
+                if (hasAnswered) {
+                    if (isCorrectOption) {
+                        btnStyle = 'bg-emerald-500/15 border-emerald-400 text-emerald-100 shadow-lg shadow-emerald-500/10';
+                        badgeStyle = 'bg-emerald-400 text-slate-950';
+                        statusIcon = '<span class="text-emerald-300 font-black">✓ إجابة صحيحة</span>';
+                    } else if (isSelected) {
+                        btnStyle = 'bg-rose-500/15 border-rose-500 text-rose-100 shadow-lg shadow-rose-500/10';
+                        badgeStyle = 'bg-rose-500 text-white';
+                        statusIcon = '<span class="text-rose-300 font-black">✕ اختيارك</span>';
+                    } else {
+                        btnStyle = 'bg-white/[0.02] border-white/5 text-slate-400 opacity-75';
+                    }
+                }
+
+                btn.className = `w-full text-right px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border font-bold text-sm sm:text-base flex items-center justify-between gap-3 transition cursor-pointer ${btnStyle}`;
+
+                btn.innerHTML = `
+                    <span class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black ${badgeStyle}">${idx + 1}</span>
+                        <span>${escapeHTML(optText)}</span>
+                    </span>
+                    ${statusIcon}
+                `;
+                container.appendChild(btn);
+            });
+
+            if (feedbackEl) {
+                if (hasAnswered) {
+                    const isRight = chosen === q.correctIndex;
+                    feedbackEl.classList.remove('hidden');
+                    if (isRight) {
+                        feedbackEl.className = 'rounded-2xl p-4 border mb-7 text-sm font-bold bg-emerald-500/10 border-emerald-500/30 text-emerald-300 flex items-center gap-2';
+                        feedbackEl.innerHTML = `<span>🎉</span><span>إجابتك صحيحة! أحسنت.</span>`;
+                    } else {
+                        const correctAnswerText = q.options[q.correctIndex] ?? '';
+                        feedbackEl.className = 'rounded-2xl p-4 border mb-7 text-sm font-bold bg-rose-500/10 border-rose-500/30 text-rose-200 flex items-center gap-2';
+                        feedbackEl.innerHTML = `<span>❌</span><span>إجابة خاطئة — الإجابة الصحيحة هي: <span class="text-emerald-300 font-black">${escapeHTML(correctAnswerText)}</span></span>`;
+                    }
+                } else {
+                    feedbackEl.classList.add('hidden');
+                    feedbackEl.innerHTML = '';
+                }
+            }
+
+            document.getElementById('prev-question-btn').disabled = currentQuestionIndex === 0;
+            const nextBtn = document.getElementById('next-question-btn');
+            nextBtn.disabled = !hasAnswered;
+            nextBtn.textContent = currentQuestionIndex === total - 1 ? 'إنهاء التحدي وحفظ النتيجة 🏁' : 'التالي';
+        }
+
+        function selectOption(optionIndex) {
+            selectedAnswers[currentQuestionIndex] = optionIndex;
+            renderQuestion();
+        }
+
+        function handlePrevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function handleNextQuestion() {
+            if (selectedAnswers[currentQuestionIndex] === null || selectedAnswers[currentQuestionIndex] === undefined) {
+                return;
+            }
+            if (currentQuestionIndex < appData.questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function getRankInfo(percent, personName) {
+            if (percent >= 90) {
+                return { emoji: '👑', title: `أسطورة ${personName}!`, desc: `ما شاء الله، تعرف ${personName} كأنك ظله!` };
+            }
+            if (percent >= 70) {
+                return { emoji: '🔥', title: `قريب جداً من ${personName}`, desc: 'معرفة قوية وممتازة لمعظم تفاصيله.' };
+            }
+            if (percent >= 40) {
+                return { emoji: '⚡', title: 'نص ونص.. يبغالك جلسة معه', desc: 'تعرف الأساسيات لكن باقي لك تفاصيل كثيرة.' };
+            }
+            return { emoji: '😅', title: `تحتاج تتعرف على ${personName} من جديد`, desc: 'النتيجة متواضعة، بس زين إنك شاركت!' };
+        }
+
+        function finishQuiz() {
+            const total = appData.questions.length;
+            let score = 0;
+            const detailedAnswers = appData.questions.map((q, idx) => {
+                const chosenIdx = selectedAnswers[idx];
+                const isCorrect = chosenIdx === q.correctIndex;
+                if (isCorrect) score++;
+                return {
+                    questionText: q.text,
+                    chosenIndex: chosenIdx,
+                    chosenText: chosenIdx !== null && chosenIdx !== undefined ? q.options[chosenIdx] : 'لم يُجب',
+                    correctIndex: q.correctIndex,
+                    correctText: q.options[q.correctIndex],
+                    isCorrect
+                };
+            });
+
+            const percent = total > 0 ? Math.round((score / total) * 100) : 0;
+            const playerRecord = {
+                id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                name: currentPlayerName,
+                score,
+                total,
+                percent,
+                date: new Date().toLocaleString('ar-AE'),
+                answers: detailedAnswers
+            };
+
+            if (!Array.isArray(appData.players)) {
+                appData.players = [];
+            }
+            appData.players.unshift(playerRecord);
+            lastFinishedPlayerId = playerRecord.id;
+
+            saveToLocalStorage();
+            setAttemptLock({
+                locked: true,
+                playerId: playerRecord.id,
+                name: playerRecord.name,
+                score: playerRecord.score,
+                total: playerRecord.total,
+                percent: playerRecord.percent,
+                lockedAt: new Date().toISOString()
+            });
+
+            sendDiscordNotification(playerRecord);
+            renderResultScreen(playerRecord);
+            switchScreen('screen-result');
+        }
+
+        function renderResultScreen(playerRecord) {
+            const rank = getRankInfo(playerRecord.percent, appData.settings.personName || 'عبيد');
+            document.getElementById('result-emoji').textContent = rank.emoji;
+            document.getElementById('result-player-greeting').textContent = `نتيجة المتحدي: ${playerRecord.name}`;
+            document.getElementById('result-rank-title').textContent = rank.title;
+            document.getElementById('result-rank-desc').textContent = rank.desc;
+            document.getElementById('result-score-text').textContent = `${playerRecord.score}/${playerRecord.total}`;
+            document.getElementById('result-percent-text').textContent = `${playerRecord.percent}%`;
+
+            const listEl = document.getElementById('result-summary-list');
+            listEl.classList.add('hidden');
+            document.getElementById('summary-chevron').style.transform = 'rotate(0deg)';
+            listEl.innerHTML = playerRecord.answers.map((ans, i) => `
+                <div class="rounded-2xl p-3.5 border ${
+                    ans.isCorrect ? 'bg-emerald-500/10 border-emerald-500/25' : 'bg-rose-500/10 border-rose-500/25'
+                }">
+                    <div class="flex items-start justify-between gap-2 font-bold text-xs sm:text-sm text-white mb-1">
+                        <span>${i + 1}. ${escapeHTML(ans.questionText)}</span>
+                        <span class="${ans.isCorrect ? 'text-emerald-400' : 'text-rose-400'} shrink-0">${ans.isCorrect ? '✓ صحيحة' : '✕ خطأ'}</span>
+                    </div>
+                    <div class="text-xs text-slate-300">إجابتك: <span class="font-bold">${escapeHTML(ans.chosenText)}</span></div>
+                    ${!ans.isCorrect ? `<div class="text-xs text-emerald-300 mt-0.5">الصحيحة: <span class="font-bold">${escapeHTML(ans.correctText)}</span></div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function toggleSummaryAccordion() {
+            const listEl = document.getElementById('result-summary-list');
+            const chevron = document.getElementById('summary-chevron');
+            const isHidden = listEl.classList.contains('hidden');
+            if (isHidden) {
+                listEl.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                listEl.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function shareCurrentResult() {
+            const player = (appData.players || []).find(p => p.id === lastFinishedPlayerId);
+            if (!player) {
+                shareLockedResult();
+                return;
+            }
+            const text = `أنا "${player.name}" جبت ${player.score} من ${player.total} (${player.percent}%) في تحدي "${appData.settings.title}"! 👑\nادخل وسجّل اسمك وشوف كم تعرف ${appData.settings.personName}:\n${window.location.href}`;
+            copyTextToClipboard(text, 'تم نسخ نتيجتك! الصقها وشاركها الآن 🎉');
+        }
+
+        async function sendDiscordNotification(player) {
+            const url = (appData.settings && appData.settings.webhookUrl) ? appData.settings.webhookUrl.trim() : '';
+            if (!url) return;
+
+            try {
+                const lines = (player.answers || []).map((a, idx) =>
+                    `${idx + 1}. ${a.isCorrect ? '✅' : '❌'} **${a.questionText}**\n   ↳ إجابته: ${a.chosenText}${!a.isCorrect ? ` (الصحيحة: ${a.correctText})` : ''}`
+                ).join('\n');
+
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: `👑 نتيجة جديدة في: ${appData.settings.title}`,
+                            color: player.percent >= 70 ? 16038958 : 3900150,
+                            fields: [
+                                { name: 'المتحدي', value: player.name, inline: true },
+                                { name: 'الدرجة', value: `${player.score}/${player.total} (${player.percent}%)`, inline: true },
+                                { name: 'التاريخ', value: player.date, inline: true },
+                                { name: 'تفاصيل الإجابات', value: lines.slice(0, 1000) || 'لا يوجد' }
+                            ]
+                        }]
+                    })
+                });
+            } catch (err) {
+                console.warn('تعذر إرسال الإشعار إلى Discord:', err);
+            }
+        }
+
+        /* ================= ADMIN MODAL & LOGIC ================= */
+
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            if (isAdminAuthenticated) {
+                showAdminDashboard();
+            } else {
+                document.getElementById('admin-login-view').classList.remove('hidden');
+                document.getElementById('admin-dashboard-view').classList.add('hidden');
+                document.getElementById('admin-login-error').classList.add('hidden');
+                document.getElementById('admin-user-input').value = '';
+                document.getElementById('admin-pass-input').value = '';
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user-input').value.trim();
+            const p = document.getElementById('admin-pass-input').value.trim();
+            if (u === appData.settings.adminUser && p === appData.settings.adminPass) {
+                isAdminAuthenticated = true;
+                document.getElementById('admin-login-error').classList.add('hidden');
+                showAdminDashboard();
+                showToast('مرحباً بك في لوحة تحكم الأدمن 👋', 'success');
+            } else {
+                document.getElementById('admin-login-error').classList.remove('hidden');
+            }
+        }
+
+        function handleAdminLogout() {
+            isAdminAuthenticated = false;
+            document.getElementById('admin-dashboard-view').classList.add('hidden');
+            document.getElementById('admin-login-view').classList.remove('hidden');
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('admin-login-view').classList.add('hidden');
+            document.getElementById('admin-dashboard-view').classList.remove('hidden');
+            populateSettingsForm();
+            renderAdminPlayers();
+            renderAdminQuestions();
+            switchAdminTab('players');
+        }
+
+        function switchAdminTab(tabName) {
+            const tabs = ['players', 'questions', 'settings'];
+            tabs.forEach(t => {
+                const panel = document.getElementById(`admin-tab-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tabName) {
+                    panel.classList.remove('hidden');
+                    btn.className = 'px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold bg-amber-400/15 text-amber-300 border-b-2 border-amber-400 cursor-pointer';
+                } else {
+                    panel.classList.add('hidden');
+                    btn.className = 'px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white cursor-pointer';
+                }
+            });
+        }
+
+        function renderAdminPlayers() {
+            const players = appData.players || [];
+            document.getElementById('admin-players-count').textContent = players.length;
+
+            const container = document.getElementById('admin-players-list');
+            if (players.length === 0) {
+                container.innerHTML = `
+                    <div class="rounded-2xl bg-white/[0.02] border border-white/10 p-8 text-center text-sm text-slate-400">
+                        لم يكمل أي لاعب الاختبار بعد.
+                    </div>
+                `;
+                return;
+            }
+
+            const lock = getAttemptLock();
+
+            container.innerHTML = players.map(p => {
+                const isLockedHere = !!(lock && lock.locked && lock.playerId === p.id);
+                return `
+                    <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="font-extrabold text-base text-white">${escapeHTML(p.name)}</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                                    ${p.score}/${p.total} (${p.percent}%)
+                                </span>
+                                ${isLockedHere ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-300">🔒 مقفل</span>' : ''}
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1">${escapeHTML(p.date || '')}</div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button
+                                type="button"
+                                onclick="openPlayerDetailModal('${p.id}')"
+                                class="px-3 py-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 text-xs font-bold cursor-pointer"
+                            >
+                                📋 الإجابات
+                            </button>
+                            <button
+                                type="button"
+                                onclick="resetExamForPlayer('${p.id}')"
+                                class="px-3 py-2 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/30 text-amber-300 text-xs font-bold cursor-pointer"
+                            >
+                                🔁 إعادة امتحان
+                            </button>
+                            <button
+                                type="button"
+                                onclick="deletePlayerRecord('${p.id}')"
+                                class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold cursor-pointer"
+                            >
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function resetExamForPlayer(playerId) {
+            const player = (appData.players || []).find(p => p.id === playerId);
+            if (!player) return;
+
+            const lock = getAttemptLock();
+            if (lock && lock.playerId === playerId) {
+                clearAttemptLock();
+            }
+
+            appData.players = appData.players.filter(p => p.id !== playerId);
+            saveToLocalStorage();
+            renderAdminPlayers();
+            showToast(`تم فتح إعادة الامتحان للمتحدي "${player.name}" ✅`, 'success');
+
+            if (!isAttemptLockedForThisDevice()) {
+                currentPlayerName = '';
+                applySettingsToUI();
+                switchScreen('screen-welcome');
+            }
+        }
+
+        function deletePlayerRecord(playerId) {
+            const lock = getAttemptLock();
+            if (lock && lock.playerId === playerId) {
+                clearAttemptLock();
+            }
+            appData.players = (appData.players || []).filter(p => p.id !== playerId);
+            saveToLocalStorage();
+            renderAdminPlayers();
+            showToast('تم حذف سجل اللاعب.', 'info');
+        }
+
+        function clearAllPlayersLog() {
+            appData.players = [];
+            clearAttemptLock();
+            saveToLocalStorage();
+            renderAdminPlayers();
+            showToast('تم مسح جميع سجلات اللاعبين وإلغاء القفل.', 'info');
+        }
+
+        function openPlayerDetailModal(playerId) {
+            const player = (appData.players || []).find(p => p.id === playerId);
+            if (!player) return;
+
+            document.getElementById('detail-player-title').textContent = `إجابات: ${player.name}`;
+            document.getElementById('detail-player-meta').textContent = `النتيجة: ${player.score}/${player.total} (${player.percent}%) • ${player.date || ''}`;
+
+            const list = document.getElementById('detail-player-answers');
+            list.innerHTML = (player.answers || []).map((a, idx) => `
+                <div class="rounded-2xl p-3.5 border ${
+                    a.isCorrect ? 'bg-emerald-500/10 border-emerald-500/25' : 'bg-rose-500/10 border-rose-500/25'
+                }">
+                    <div class="flex items-start justify-between gap-2 text-sm font-bold text-white mb-1">
+                        <span>${idx + 1}. ${escapeHTML(a.questionText)}</span>
+                        <span class="${a.isCorrect ? 'text-emerald-400' : 'text-rose-400'} shrink-0">${a.isCorrect ? '✓' : '✕'}</span>
+                    </div>
+                    <div class="text-xs text-slate-200">إجابة اللاعب: <strong>${escapeHTML(a.chosenText)}</strong></div>
+                    ${!a.isCorrect ? `<div class="text-xs text-emerald-300 mt-0.5">الإجابة الصحيحة: <strong>${escapeHTML(a.correctText)}</strong></div>` : ''}
+                </div>
+            `).join('');
+
+            document.getElementById('player-detail-modal').classList.remove('hidden');
+        }
+
+        function closePlayerDetailModal() {
+            document.getElementById('player-detail-modal').classList.add('hidden');
+        }
+
+        function exportPlayersCSV() {
+            const players = appData.players || [];
+            if (players.length === 0) {
+                showToast('لا توجد بيانات لتصديرها.', 'error');
+                return;
+            }
+            const headers = ['الاسم', 'الدرجة', 'الإجمالي', 'النسبة المئوية', 'التاريخ'];
+            const rows = players.map(p => [
+                `"${String(p.name).replace(/"/g, '""')}"`,
+                p.score,
+                p.total,
+                `"${p.percent}%"`,
+                `"${String(p.date || '').replace(/"/g, '""')}"`
+            ].join(','));
+
+            const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'obaid-quiz-players.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('تم تصدير ملف CSV بنجاح 📊', 'success');
+        }
+
+        function renderAdminQuestions() {
+            const questions = appData.questions || [];
+            document.getElementById('admin-questions-count').textContent = questions.length;
+            applySettingsToUI();
+
+            const container = document.getElementById('admin-questions-list');
+            container.innerHTML = questions.map((q, qIdx) => `
+                <div class="rounded-2xl bg-white/[0.03] border border-white/10 p-4 space-y-2.5">
+                    <div class="flex items-start justify-between gap-3">
+                        <h5 class="font-extrabold text-sm sm:text-base text-white">${qIdx + 1}. ${escapeHTML(q.text)}</h5>
+                        <button
+                            type="button"
+                            onclick="deleteQuestion('${q.id}')"
+                            class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs font-bold shrink-0 cursor-pointer"
+                        >
+                            حذف
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        ${q.options.map((opt, oIdx) => `
+                            <div class="px-3 py-2 rounded-xl border ${
+                                oIdx === q.correctIndex
+                                    ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300 font-bold'
+                                    : 'bg-white/[0.02] border-white/10 text-slate-300'
+                            }">
+                                ${oIdx + 1}. ${escapeHTML(opt)} ${oIdx === q.correctIndex ? '✓' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleAddQuestion(e) {
+            e.preventDefault();
+            const text = document.getElementById('new-q-text').value.trim();
+            const opts = [
+                document.getElementById('new-q-opt-0').value.trim(),
+                document.getElementById('new-q-opt-1').value.trim(),
+                document.getElementById('new-q-opt-2').value.trim(),
+                document.getElementById('new-q-opt-3').value.trim()
+            ];
+            const correctIndex = parseInt(document.getElementById('new-q-correct').value, 10) || 0;
+
+            if (!text || opts.some(o => !o)) {
+                showToast('يرجى تعبئة نص السؤال وجميع الخيارات الأربعة.', 'error');
+                return;
+            }
+
+            appData.questions.push({
+                id: 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                text,
+                options: opts,
+                correctIndex
+            });
+
+            saveToLocalStorage();
+            renderAdminQuestions();
+            document.getElementById('add-question-form').reset();
+            showToast('تمت إضافة السؤال بنجاح ✅', 'success');
+        }
+
+        function deleteQuestion(qId) {
+            if (appData.questions.length <= 1) {
+                showToast('يجب أن يبقى سؤال واحد على الأقل في الاختبار.', 'error');
+                return;
+            }
+            appData.questions = appData.questions.filter(q => q.id !== qId);
+            saveToLocalStorage();
+            renderAdminQuestions();
+            showToast('تم حذف السؤال.', 'info');
+        }
+
+        function populateSettingsForm() {
+            const s = appData.settings || DEFAULT_APP_DATA.settings;
+            document.getElementById('set-person-name').value = s.personName || '';
+            document.getElementById('set-title').value = s.title || '';
+            document.getElementById('set-subtitle').value = s.subtitle || '';
+            document.getElementById('set-admin-user').value = s.adminUser || 'admin';
+            document.getElementById('set-admin-pass').value = s.adminPass || '1234';
+            document.getElementById('set-webhook-url').value = s.webhookUrl || '';
+        }
+
+        function handleSaveSettings(e) {
+            e.preventDefault();
+            appData.settings = {
+                personName: document.getElementById('set-person-name').value.trim() || 'عبيد',
+                title: document.getElementById('set-title').value.trim() || 'هل تعرف عبيد؟',
+                subtitle: document.getElementById('set-subtitle').value.trim(),
+                adminUser: document.getElementById('set-admin-user').value.trim() || 'admin',
+                adminPass: document.getElementById('set-admin-pass').value.trim() || '1234',
+                webhookUrl: document.getElementById('set-webhook-url').value.trim()
+            };
+            saveToLocalStorage();
+            applySettingsToUI();
+            showToast('تم حفظ الإعدادات وتحديث الواجهة ✅', 'success');
+        }
+
+        function handleResetDefaults() {
+            const currentPlayers = appData.players || [];
+            appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
+            appData.players = currentPlayers;
+            saveToLocalStorage();
+            populateSettingsForm();
+            renderAdminQuestions();
+            applySettingsToUI();
+            showToast('تمت استعادة الإعدادات والأسئلة الافتراضية.', 'info');
+        }
+
+        function copyShareLink() {
+            copyTextToClipboard(window.location.href, 'تم نسخ رابط التحدي بنجاح 🔗');
+        }
+
+        function downloadUpdatedHtml() {
+            const embeddedScript = `
+                window.__PRELOADED_QUIZ_DATA__ = ${JSON.stringify(appData)};
+            `;
+            let htmlDoc = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            htmlDoc = htmlDoc.replace(
+                '<script>',
+                `<script>\n${embeddedScript}`
+            );
+            const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('تم تحميل ملف index.html المحدّث بنجاح ⬇️', 'success');
+        }
+
+        function initApp() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    appData = {
+                        settings: { ...DEFAULT_APP_DATA.settings, ...(parsed.settings || {}) },
+                        questions: Array.isArray(parsed.questions) && parsed.questions.length > 0
+                            ? parsed.questions
+                            : DEFAULT_APP_DATA.questions,
+                        players: Array.isArray(parsed.players) ? parsed.players : []
+                    };
+                } else if (window.__PRELOADED_QUIZ_DATA__) {
+                    const pre = window.__PRELOADED_QUIZ_DATA__;
+                    appData = {
+                        settings: { ...DEFAULT_APP_DATA.settings, ...(pre.settings || {}) },
+                        questions: Array.isArray(pre.questions) && pre.questions.length > 0
+                            ? pre.questions
+                            : DEFAULT_APP_DATA.questions,
+                        players: Array.isArray(pre.players) ? pre.players : []
+                    };
+                }
+            } catch (e) {
+                console.warn('تعذر قراءة البيانات المحفوظة، سيتم استخدام الافتراضية:', e);
+                appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
+            }
+
+            applySettingsToUI();
+
+            if (isAttemptLockedForThisDevice()) {
+                showLockedScreen();
+            } else {
+                switchScreen('screen-welcome');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function () {
+            try {
+                initApp();
+            } catch (err) {
+                console.error('خطأ أثناء تهيئة التطبيق:', err);
+            }
+        });
+    </script>
+</body>
+</html>
