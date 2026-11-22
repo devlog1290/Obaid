@@ -532,6 +532,7 @@
     <script>
         const STORAGE_KEY = 'obaid_vip_quiz_v2';
         const LOCK_STORAGE_KEY = 'obaid_vip_quiz_attempt_lock_v1';
+        const ADMIN_SESSION_KEY = 'obaid_vip_quiz_admin_auth_v1';
 
         const DEFAULT_APP_DATA = {
             settings: {
@@ -661,6 +662,27 @@
                 localStorage.removeItem(LOCK_STORAGE_KEY);
             } catch (e) {
                 console.warn('خطأ في إزالة قفل المحاولة:', e);
+            }
+        }
+
+        function setAdminSessionAuth(authState) {
+            isAdminAuthenticated = Boolean(authState);
+            try {
+                if (isAdminAuthenticated) {
+                    sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
+                } else {
+                    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+                }
+            } catch (e) {
+                console.warn('تعذر حفظ حالة جلسة الأدمن:', e);
+            }
+        }
+
+        function restoreAdminSessionAuth() {
+            try {
+                isAdminAuthenticated = sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
+            } catch (e) {
+                isAdminAuthenticated = false;
             }
         }
 
@@ -1065,7 +1087,7 @@
             const u = document.getElementById('admin-user-input').value.trim();
             const p = document.getElementById('admin-pass-input').value.trim();
             if (u === appData.settings.adminUser && p === appData.settings.adminPass) {
-                isAdminAuthenticated = true;
+                setAdminSessionAuth(true);
                 document.getElementById('admin-login-error').classList.add('hidden');
                 showAdminDashboard();
                 showToast('مرحباً بك في لوحة تحكم الأدمن 👋', 'success');
@@ -1075,7 +1097,7 @@
         }
 
         function handleAdminLogout() {
-            isAdminAuthenticated = false;
+            setAdminSessionAuth(false);
             document.getElementById('admin-dashboard-view').classList.add('hidden');
             document.getElementById('admin-login-view').classList.remove('hidden');
         }
@@ -1394,6 +1416,7 @@
         }
 
         function initApp() {
+            restoreAdminSessionAuth();
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) {
