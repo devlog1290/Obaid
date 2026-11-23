@@ -55,6 +55,45 @@
             }
         }
 
+        .glass-card {
+            background: linear-gradient(145deg, rgba(16, 23, 39, 0.88), rgba(10, 14, 24, 0.94));
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+        }
+
+        .gold-btn {
+            background: linear-gradient(135deg, #f5b82e 0%, #ffd56b 50%, #e09f14 100%);
+            color: #090d16;
+            box-shadow: 0 10px 25px -5px rgba(245, 184, 46, 0.4);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+        }
+
+        .gold-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow: 0 14px 30px -5px rgba(245, 184, 46, 0.55);
+        }
+
+        .gold-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
         .animate-fade-in {
             animation: fadeInUp 0.35s ease-out forwards;
         }
@@ -526,16 +565,6 @@
                                 <label class="block text-xs font-bold text-slate-300 mb-1">الوصف المختصر</label>
                                 <input id="set-subtitle" type="text" oninput="handleLiveSettingsPreview('subtitle')" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
                             </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-300 mb-1">عنوان الصفحة الرئيسي</label>
-                                    <input id="set-title" type="text" required oninput="handleLiveSettingsPreview()" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">الوصف المختصر</label>
-                                <input id="set-subtitle" type="text" oninput="handleLiveSettingsPreview()" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
-                            </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -551,6 +580,35 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-300 mb-1">رابط Discord Webhook (اختياري لاستلام النتائج فوراً)</label>
                                 <input id="set-webhook-url" type="url" placeholder="https://discord.com/api/webhooks/..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a12] border border-white/15 text-sm text-white outline-none focus:border-amber-400" />
+                            </div>
+
+                            <!-- Cloud Sync (JSONBin.io) for GitHub Pages -->
+                            <div class="rounded-2xl bg-sky-500/10 border border-sky-400/25 p-4 space-y-3">
+                                <div class="flex items-center justify-between gap-2">
+                                    <h5 class="font-extrabold text-xs sm:text-sm text-sky-300">☁️ المزامنة السحابية الفورية (لتحديث الموقع عند الجميع تلقائياً)</h5>
+                                    <span id="cloud-sync-status" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/10 text-slate-300">غير مربوط</span>
+                                </div>
+                                <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                                    لأن GitHub Pages موقع ثابت، اربط حسابك المجاني من <a href="https://jsonbin.io" target="_blank" rel="noopener" class="text-amber-300 underline font-bold">JSONBin.io</a> وضع الـ <strong>Master Key</strong> هنا، ثم اضغط <strong>إنشاء/ربط سحابة الآن</strong> لتحصل على ملف <code class="text-amber-300">index.html</code> واحد ترفعه لـ GitHub مرة واحدة فقط، وبعدها أي تعديل تسويه يتحدث عند كل الأجهزة فوراً!
+                                </p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-slate-300 mb-1">JSONBin Master Key</label>
+                                        <input id="set-cloud-key" type="text" placeholder="$2a$10$..." class="w-full px-3 py-2 rounded-xl bg-[#070a12] border border-white/15 text-xs text-white outline-none focus:border-sky-400" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-slate-300 mb-1">Bin ID (يُنشأ تلقائياً)</label>
+                                        <input id="set-cloud-bin" type="text" placeholder="يُملأ تلقائياً عند الربط" class="w-full px-3 py-2 rounded-xl bg-[#070a12] border border-white/15 text-xs text-slate-300 outline-none focus:border-sky-400" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <button type="button" onclick="setupOrSyncCloud()" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-xs cursor-pointer">
+                                        ☁️ إنشاء / مزامنة السحابة الآن
+                                    </button>
+                                    <button type="button" onclick="pullFromCloud(true)" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs cursor-pointer">
+                                        🔄 جلب أحدث البيانات من السحابة
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="flex flex-wrap gap-3 pt-2">
@@ -612,49 +670,51 @@
                 subtitle: 'سجّل اسمك أولاً وابدأ التحدي لتختبر مدى معرفتك بتفاصيل محمد حسن، عاداته، ومواقفه المفضلة.',
                 adminUser: 'admin',
                 adminPass: '1234',
-                webhookUrl: ''
+                webhookUrl: '',
+                cloudApiKey: '',
+                cloudBinId: ''
             },
             questions: [
                 {
                     id: 'q1',
-                    text: 'وش أكثر وقت يصحى أو يسهر فيه محمد حسن غالباً؟',
-                    options: ['الصباح بدري مع الشروق', 'العصر بعد القيلولة', 'آخر الليل والهدوء', 'حسب المزاج والجدول'],
-                    correctIndex: 2
-                },
-                {
-                    id: 'q2',
-                    text: 'لو خيّرت محمد حسن بين طلعة هادية أو جمعة صاخبة، وش يميل له أكثر؟',
-                    options: ['طلعة هادية ومكان رايق', 'جمعة صاخبة طول الوقت', 'جلسة بيت مع قهوة', 'حسب اللي معه'],
+                    text: 'وش أكثر مشروب يفضله محمد حسن؟',
+                    options: ['قهوة مختصة', 'شاي كرك', 'ماتشا بارد', 'عصير برتقال طازج'],
                     correctIndex: 0
                 },
                 {
+                    id: 'q2',
+                    text: 'متى يكون محمد حسن في قمة نشاطه؟',
+                    options: ['الصبح بدري', 'العصر', 'آخر الليل', 'وقت الظهر'],
+                    correctIndex: 2
+                },
+                {
                     id: 'q3',
-                    text: 'وش المشروب اللي يضبط مزاج محمد حسن بسرعة؟',
-                    options: ['قهوة / كوفي', 'شاهي', 'عصير طازج', 'موية باردة وبس'],
+                    text: 'وش أكثر شي ينرفز محمد حسن بسرعة؟',
+                    options: ['التأخير عن المواعيد', 'الزحمة في الشارع', 'انقطاع الإنترنت', 'الأكل البارد'],
                     correctIndex: 0
                 },
                 {
                     id: 'q4',
-                    text: 'كيف يكون رد فعل محمد حسن غالباً وقت المواقف المفاجئة؟',
-                    options: ['ياخذها بهدوء ويحللها', 'يعصب بسرعة', 'يضحك ويعديها', 'يسأل الكل فوراً'],
-                    correctIndex: 0
+                    text: 'وش الوجهة المفضلة عند محمد حسن للسفر والراحة؟',
+                    options: ['الطبيعة والجبال', 'المدن الصاخبة والتسوق', 'الشواطئ والبحر', 'البر والتخييم'],
+                    correctIndex: 2
                 },
                 {
                     id: 'q5',
-                    text: 'أكثر صفة تميز محمد حسن بنظر اللي يعرفونه زين؟',
-                    options: ['الصراحة والوفاء', 'التردد الدائم', 'السرعة في الغضب', 'كثرة الكلام بلا سبب'],
-                    correctIndex: 0
+                    text: 'لو محمد حسن فاز بمبلغ كبير، وش أول شي يسويه؟',
+                    options: ['يسافر حول العالم', 'يشتري سيارة أحلامه', 'يستثمر في مشروع خاص', 'يعزم ربعه على عشاء فاخر'],
+                    correctIndex: 2
                 }
             ],
             players: []
         };
 
         let appData = JSON.parse(JSON.stringify(DEFAULT_APP_DATA));
-        let isAdminAuthenticated = false;
         let currentPlayerName = '';
         let currentQuestionIndex = 0;
         let selectedAnswers = [];
         let lastFinishedPlayerId = null;
+        let isAdminAuthenticated = false;
 
         function escapeHTML(str) {
             return String(str ?? '')
@@ -670,21 +730,21 @@
             if (!container) return;
 
             const colors = {
-                info: 'bg-[#131b2e] border-sky-400/40 text-sky-200',
-                success: 'bg-[#10231b] border-emerald-400/40 text-emerald-200',
-                error: 'bg-[#261117] border-rose-400/40 text-rose-200'
+                success: 'bg-emerald-950/95 border-emerald-400/40 text-emerald-200',
+                error: 'bg-rose-950/95 border-rose-400/40 text-rose-200',
+                info: 'bg-slate-900/95 border-amber-400/40 text-amber-100'
             };
 
             const toast = document.createElement('div');
-            toast.className = `px-4 py-3 rounded-2xl border shadow-xl text-xs sm:text-sm font-bold backdrop-blur-md transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.className = `pointer-events-auto px-4 py-3 rounded-2xl border shadow-2xl text-xs sm:text-sm font-bold text-center backdrop-blur-xl transition-all duration-300 ${colors[type] || colors.info}`;
             toast.textContent = message;
             container.appendChild(toast);
 
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateY(-8px)';
-                setTimeout(() => toast.remove(), 250);
-            }, 3000);
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
         }
 
         function copyTextToClipboard(text, successMsg = 'تم النسخ بنجاح!') {
@@ -699,17 +759,176 @@
                 document.body.removeChild(textarea);
                 showToast(successMsg, 'success');
             } catch (err) {
-                showToast('تعذر النسخ تلقائياً.', 'error');
+                console.warn('تعذر النسخ:', err);
+                showToast('تعذر النسخ تلقائياً، يرجى النسخ يدوياً.', 'error');
             }
         }
 
-        function saveToLocalStorage() {
+        function saveToLocalStorage(skipCloudPush = false) {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
                 syncEmbeddedAppData();
                 syncShareHashInUrl();
+                if (!skipCloudPush) {
+                    scheduleCloudPush();
+                }
             } catch (e) {
                 console.warn('خطأ في حفظ البيانات محلياً:', e);
+            }
+        }
+
+        let cloudPushTimer = null;
+        function scheduleCloudPush() {
+            const s = appData.settings || {};
+            if (!s.cloudApiKey || !s.cloudBinId) return;
+            clearTimeout(cloudPushTimer);
+            cloudPushTimer = setTimeout(() => {
+                pushToCloud(false);
+            }, 900);
+        }
+
+        function updateCloudStatusBadge(text, ok = false) {
+            const el = document.getElementById('cloud-sync-status');
+            if (!el) return;
+            el.textContent = text;
+            el.className = ok
+                ? 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                : 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/10 text-slate-300';
+        }
+
+        async function setupOrSyncCloud() {
+            const keyInput = document.getElementById('set-cloud-key');
+            const binInput = document.getElementById('set-cloud-bin');
+            const apiKey = (keyInput ? keyInput.value.trim() : '') || appData.settings.cloudApiKey;
+            let binId = (binInput ? binInput.value.trim() : '') || appData.settings.cloudBinId;
+
+            if (!apiKey) {
+                showToast('يرجى إدخال JSONBin Master Key أولاً.', 'error');
+                return;
+            }
+
+            appData.settings.cloudApiKey = apiKey;
+            updateCloudStatusBadge('جاري الربط...', false);
+
+            try {
+                const payloadToSync = {
+                    settings: {
+                        personName: appData.settings.personName,
+                        title: appData.settings.title,
+                        subtitle: appData.settings.subtitle,
+                        adminUser: appData.settings.adminUser,
+                        adminPass: appData.settings.adminPass,
+                        webhookUrl: appData.settings.webhookUrl
+                    },
+                    questions: appData.questions,
+                    players: appData.players || []
+                };
+
+                if (!binId) {
+                    const res = await fetch('https://api.jsonbin.io/v3/b', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': apiKey,
+                            'X-Bin-Name': 'ObaidQuizData',
+                            'X-Bin-Private': 'false'
+                        },
+                        body: JSON.stringify(payloadToSync)
+                    });
+                    if (!res.ok) throw new Error('فشل إنشاء السحابة');
+                    const data = await res.json();
+                    binId = data.metadata && data.metadata.id ? data.metadata.id : '';
+                    if (!binId) throw new Error('لم يتم استلام معرف السحابة');
+                    appData.settings.cloudBinId = binId;
+                    if (binInput) binInput.value = binId;
+                } else {
+                    appData.settings.cloudBinId = binId;
+                    await pushToCloud(false);
+                }
+
+                saveToLocalStorage(true);
+                updateCloudStatusBadge('متصل ومزامن ✓', true);
+                showToast('تم ربط السحابة بنجاح! حمّل index.html المحدّث وارفعه لـ GitHub مرة واحدة فقط ☁️', 'success');
+            } catch (err) {
+                console.error(err);
+                updateCloudStatusBadge('فشل الربط ✕', false);
+                showToast('تأكد من صحة Master Key من موقع JSONBin.io', 'error');
+            }
+        }
+
+        async function pushToCloud(showNotify = false) {
+            const s = appData.settings || {};
+            if (!s.cloudApiKey || !s.cloudBinId) return;
+            try {
+                const payloadToSync = {
+                    settings: {
+                        personName: s.personName,
+                        title: s.title,
+                        subtitle: s.subtitle,
+                        adminUser: s.adminUser,
+                        adminPass: s.adminPass,
+                        webhookUrl: s.webhookUrl
+                    },
+                    questions: appData.questions,
+                    players: appData.players || []
+                };
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(s.cloudBinId)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': s.cloudApiKey
+                    },
+                    body: JSON.stringify(payloadToSync)
+                });
+                if (res.ok) {
+                    updateCloudStatusBadge('متصل ومزامن ✓', true);
+                    if (showNotify) showToast('تم رفع التعديلات للسحابة بنجاح ☁️', 'success');
+                }
+            } catch (err) {
+                console.warn('تعذر الرفع إلى السحابة:', err);
+            }
+        }
+
+        async function pullFromCloud(showNotify = false) {
+            const s = appData.settings || {};
+            if (!s.cloudBinId) return;
+            try {
+                const headers = {};
+                if (s.cloudApiKey) headers['X-Master-Key'] = s.cloudApiKey;
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(s.cloudBinId)}/latest`, {
+                    headers,
+                    cache: 'no-store'
+                });
+                if (!res.ok) return;
+                const json = await res.json();
+                const record = json.record || json;
+                if (record && typeof record === 'object') {
+                    if (record.settings) {
+                        appData.settings = {
+                            ...appData.settings,
+                            ...record.settings,
+                            cloudApiKey: appData.settings.cloudApiKey,
+                            cloudBinId: appData.settings.cloudBinId
+                        };
+                    }
+                    if (Array.isArray(record.questions) && record.questions.length > 0) {
+                        appData.questions = record.questions;
+                    }
+                    if (Array.isArray(record.players)) {
+                        appData.players = record.players;
+                    }
+                    saveToLocalStorage(true);
+                    applySettingsToUI();
+                    if (isAdminAuthenticated) {
+                        populateSettingsForm();
+                        renderAdminPlayers();
+                        renderAdminQuestions();
+                    }
+                    updateCloudStatusBadge('متصل ومزامن ✓', true);
+                    if (showNotify) showToast('تم تحديث البيانات من السحابة بنجاح 🔄', 'success');
+                }
+            } catch (err) {
+                console.warn('تعذر جلب البيانات من السحابة:', err);
             }
         }
 
@@ -1580,6 +1799,11 @@
             document.getElementById('set-admin-user').value = s.adminUser || 'admin';
             document.getElementById('set-admin-pass').value = s.adminPass || '1234';
             document.getElementById('set-webhook-url').value = s.webhookUrl || '';
+            const keyEl = document.getElementById('set-cloud-key');
+            const binEl = document.getElementById('set-cloud-bin');
+            if (keyEl) keyEl.value = s.cloudApiKey || '';
+            if (binEl) binEl.value = s.cloudBinId || '';
+            updateCloudStatusBadge(s.cloudBinId ? 'متصل ومزامن ✓' : 'غير مربوط', Boolean(s.cloudBinId));
         }
 
         function handleLiveSettingsPreview(changedField = '') {
@@ -1622,6 +1846,8 @@
                 const adminUser = document.getElementById('set-admin-user').value.trim() || 'admin';
                 const adminPass = document.getElementById('set-admin-pass').value.trim() || '1234';
                 const webhookUrl = document.getElementById('set-webhook-url').value.trim();
+                const cloudApiKey = (document.getElementById('set-cloud-key')?.value || '').trim();
+                const cloudBinId = (document.getElementById('set-cloud-bin')?.value || '').trim();
 
                 appData.settings = {
                     personName,
@@ -1629,7 +1855,9 @@
                     subtitle,
                     adminUser,
                     adminPass,
-                    webhookUrl
+                    webhookUrl,
+                    cloudApiKey,
+                    cloudBinId
                 };
 
                 saveToLocalStorage();
@@ -1763,6 +1991,14 @@
                 showLockedScreen();
             } else {
                 switchScreen('screen-welcome');
+            }
+
+            if (appData.settings && appData.settings.cloudBinId) {
+                pullFromCloud(false).then(() => {
+                    if (isAttemptLockedForThisDevice()) {
+                        showLockedScreen();
+                    }
+                });
             }
         }
 
